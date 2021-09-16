@@ -1,0 +1,32 @@
+MeetingsList
+
+1. 
+{
+    "_id": "614353b81ebf190015d3f51d",
+    "name": "Rahul's Meeting",
+    "description": "Test meeting created by Rahul",
+    "date": "2021-09-16T00:00:00.000Z",
+    "startTime": {
+        "hours": 19,
+        "minutes": 0
+    },
+    "endTime": {
+        "hours": 20,
+        "minutes": 30
+    },
+    "attendees": [
+        {
+            "userId": "614305881ebf190015d3f500",
+            "email": "tanmay.meetings@example.com"
+        },
+        {
+            "userId": "614305b91ebf190015d3f501",
+            "email": "akash.meetings@example.com"
+        },
+        {
+            "userId": "6143056a1ebf190015d3f4ff",
+            "email": "rahul.meetings@example.com"
+        }
+    ],
+    "__v": 0
+}
