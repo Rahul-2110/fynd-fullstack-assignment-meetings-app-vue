@@ -20,9 +20,18 @@ export default {
 }
 </script>
 
-<style >
-.router-view{
+<style>
+.container{
     height:100vh;
-    background-color: black;
+    margin: 120px 2em; 
+    padding-bottom: 120px;
 }
+
+@media (min-width: 768px) {
+  .container{
+    margin: 100px 3em;
+    padding-bottom: 100px;
+  }
+}
+
 </style>
