@@ -27,11 +27,17 @@ export default {
     padding-bottom: 120px;
 }
 
+hr {
+  background-color: #b7bcbd; 
+  height: 1px; 
+  border: 0; 
+  margin : 2px 0;
+}
+
 @media (min-width: 768px) {
   .container{
     margin: 100px 3em;
     padding-bottom: 100px;
   }
 }
-
 </style>
