@@ -3,7 +3,7 @@ import AppConfig from '@/config';
 
 const { apiBaseUrl } = AppConfig;
 
-const getMeetingsOnADate = async (date) => {
+const  s_calender_getMeetingsOnADate = async (date) => {
     const response = await axios.get(
          `${apiBaseUrl}/calendar`,
          {
@@ -15,5 +15,5 @@ const getMeetingsOnADate = async (date) => {
 }
 
 export {
-    getMeetingsOnADate
+    s_calender_getMeetingsOnADate
 };

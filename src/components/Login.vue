@@ -12,7 +12,7 @@
 				placeholder="Username"
 				autofocus="autofocus"
 				type="text"
-				v-model="email"
+				v-model="d_email"
 			/>
 		</div>
 		<div class="form-group">
@@ -21,7 +21,7 @@
 				class="form-control"
 				placeholder="Password"
 				type="password"
-				v-model="password"
+				v-model="d_password"
 			/>
 		</div>
 		<div class="form-group subform">
@@ -47,24 +47,24 @@
 </template>
 
 <script>
-	import { meetingslogin } from "@/services/loginService.js";
+	import { s_users_meetingslogin } from "@/services/userManagementServices.js";
 	import router from "@/router/routes.js";
 	export default {
 		name: "Login",
 		router,
 		data() {
 			return {
-				email: null,
-				password: null,
-				emailReg:
+				d_email: null,
+				d_password: null,
+				d_emailReg:
 					/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
-				passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
+				d_passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
 			};
 		},
 		methods: {
-			async validate() {
+			async m_validate() {
 				try {
-					const data = await meetingslogin(this.email, this.password);
+					const data = await s_users_meetingslogin(this.d_email, this.d_password);
 					console.log(data.token);
 					this.$router.push({ path: "/calendar" });
 				} catch (error) {
@@ -72,12 +72,12 @@
 				}
 			},
 			login() {
-				if (this.email != null && this.emailReg.test(this.email)) {
+				if (this.d_email != null && this.d_emailReg.test(this.d_email)) {
 					if (
-						this.password != null &&
-						this.passwordReg.test(this.password)
+						this.d_password != null &&
+						this.d_passwordReg.test(this.d_password)
 					) {
-						this.validate();
+						this.m_validate();
 					} else {
 						console.log("Check password");
 					}

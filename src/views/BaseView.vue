@@ -34,6 +34,14 @@ hr {
   margin : 2px 0;
 }
 
+h3 {
+  font-size: 1.3em;
+}
+
+.overflow-y-disable {
+  overflow-y: hidden;
+}
+
 @media (min-width: 768px) {
   .container{
     margin: 100px 3em;

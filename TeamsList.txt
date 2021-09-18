@@ -1,0 +1,24 @@
+TeamsList
+
+1. 
+{
+    "_id": "61461bb213823800156bb218",
+    "name": "My team",
+    "shortName": "MyTeam",
+    "description": "Test team",
+    "members": [
+        {
+            "userId": "6143056a1ebf190015d3f4ff",
+            "email": "rahul.meetings@example.com"
+        },
+        {
+            "userId": "614305881ebf190015d3f500",
+            "email": "tanmay.meetings@example.com"
+        },
+        {
+            "userId": "614305b91ebf190015d3f501",
+            "email": "akash.meetings@example.com"
+        }
+    ],
+    "__v": 0
+}

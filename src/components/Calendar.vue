@@ -1,9 +1,15 @@
 <template>
 	<div>
-		<template v-if="status === 'LOADING'">
+		<template v-if="d_status === 'LOADING'">
 			<CircleSpinner />
 		</template>
-		<template v-else-if="status === 'LOADED'">
+		<template v-else-if="d_status === 'ERROR'">
+			<ErrorBox
+				:status="d_error.response.status"
+				:message="d_error.response.statusText"
+			/>
+		</template>
+		<template v-else-if="d_status === 'LOADED'">
 			<div class="container">
 				<h1>Calendar</h1>
 				<hr />
@@ -11,16 +17,16 @@
 					<div class="date-details-container">
 						<div class="date-day">
 							<h3 id="selected-date">
-								{{ selectedDateReadableFormat }}
+								{{ c_selectedDateReadableFormat }}
 							</h3>
-							<p id="selected-week-day">{{ selectedDay }}</p>
+							<p id="selected-week-day">{{ c_selectedDay }}</p>
 						</div>
 						<div class="date-picker">
 							<input
-								v-model="selectedDate"
+								v-model="d_selectedDate"
 								class="datepicker-input"
 								type="date"
-								@change="getMeetings"
+								@change="m_getMeetings"
 							/>
 						</div>
 					</div>
@@ -28,14 +34,13 @@
 				<div class="calender-time-container">
 					<div class="meetings-list">
 						<div
-							v-for="meeting in meetings"
+							v-for="meeting in d_meetings"
 							:key="meeting._id"
 							class="meeting"
 							:style="{
-								top: meetingsPosition[meeting._id].top + 'px',
+								top: c_meetingsPosition[meeting._id].top + 'px',
 								height:
-									meetingsPosition[meeting._id].height +
-									'px',
+									c_meetingsPosition[meeting._id].height + 'px',
 							}"
 						>
 							<div class="meeting-details">
@@ -68,60 +73,37 @@
 </template>
 
 <script>
-	import { getMeetingsOnADate } from "@/services/calendarServices.js";
-
+	import {  s_calender_getMeetingsOnADate } from "@/services/calendarServices.js";
+	import { monthsMixin, weekDaysMixin } from "@/mixins/dateMixin.js";
 	export default {
 		name: "Calendar",
+		mixins: [monthsMixin, weekDaysMixin],
 		data() {
 			return {
-				status: "LOADED",
-				meetings: [],
-				error: null,
-				selectedDate: new Date().toISOString().substr(0, 10),
+				d_status: "LOADING",
+				d_error: null,
+				d_meetings: [],
+				d_selectedDate: new Date().toISOString().substr(0, 10),
 			};
 		},
 		computed: {
-			selectedDateReadableFormat() {
-				let date = new Date(this.selectedDate);
-				const Months = [
-					"January",
-					"February",
-					"March",
-					"April",
-					"May",
-					"June",
-					"July",
-					"August",
-					"September",
-					"October",
-					"November",
-					"December",
-				];
+			c_selectedDateReadableFormat() {
+				let date = new Date(this.d_selectedDate);
 				return (
 					date.getDate() +
 					" " +
-					Months[date.getMonth()] +
+					this.Months[date.getMonth()] +
 					" " +
 					date.getFullYear()
 				);
-				//return this.selectedDate;
 			},
-			selectedDay() {
+			c_selectedDay() {
 				let date = new Date(this.selectedDate);
-				const WeekDays = [
-					"Sunday",
-					"Monday",
-					"Tuesday",
-					"Wednesday",
-					"Thursday",
-					"Friday",
-					"Saturday",
-				];
-				return WeekDays[date.getDay()];
+				return this.WeekDays[date.getDay()];
 			},
-			meetingsPosition() {
+			c_meetingsPosition() {
 				let positions = {};
-				this.meetings.forEach(function(value){
+				this.d_meetings.forEach(function (value) {
 					const startTimeInNumbers =
 						value.startTime.hours + value.startTime.minutes / 60;
 					const endTimeInNumbers =
@@ -130,8 +112,8 @@
 					let height =
 						(endTimeInNumbers - startTimeInNumbers) * 60 -
 						4 +
-						(Math.floor(endTimeInNumbers) -
-							Math.floor(startTimeInNumbers)) *
+						(Math.floor(endTimeInNumbers -
+							startTimeInNumbers) - 1)* 
 							4;
 					let position = { top: top, height: height };
 					positions[value._id] = position;
@@ -140,20 +122,23 @@
 			},
 		},
 		methods: {
-			async getMeetings() {
+			async m_getMeetings() {
 				try {
-					const response = await getMeetingsOnADate(
-						new Date(this.selectedDate).toISOString().split("T")[0]
+					const response = await s_calender_getMeetingsOnADate(
+						new Date(this.d_selectedDate).toISOString().split("T")[0]
 					);
-					this.meetings = response;
-				} catch (error) {
-					this.error = error;
+					this.d_meetings = response;
+					// console.log(this.meetings);
+				} catch (err) {
+					this.d_status = "ERROR";
+					this.d_error = err;
 				}
 			},
 		},
 		created() {
-			this.getMeetings();
-		}
+			this.m_getMeetings();
+			this.d_status = "LOADED";
+		},
 	};
 </script>
 

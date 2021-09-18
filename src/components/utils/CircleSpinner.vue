@@ -31,16 +31,16 @@
 
 .loading .part1 {
   animation: move-min 0.7s ease-in-out infinite;
-  border-left: 1px solid #000;
+  border-left: 1px solid #73c7d5;
 }
 
 .loading .part2 {
-  background-color: #000;
+  background-color: #73c7d5;
 }
 
 .loading .part3 {
   animation: move-plus 0.7s ease-in-out infinite;
-  border-right: 1px solid #000;
+  border-right: 1px solid #73c7d5;
 }
 
 @keyframes rotate {

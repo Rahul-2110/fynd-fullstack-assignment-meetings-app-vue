@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import './init.js'
-import './external/css/normalize.css';
+import "normalize.css/normalize.css";
 
 Vue.config.productionTip = false
 

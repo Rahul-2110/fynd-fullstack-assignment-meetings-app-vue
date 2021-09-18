@@ -1,12 +1,12 @@
 <template>
-	<nav :class="{ show: isCrossClicked }">
+	<nav :class="{ show: d_isCrossClicked }">
 		<div class="nav-content">
 			<!-- <router-link class="nav-link logo" to="/" exact><span>A LOGO</span></router-link> -->
 			<!-- <a href="./calendar.html" class="logo">
             <span>A LOGO</span>
             </a> -->
 
-			<div class="nav-cross" @click="isCrossClicked = !isCrossClicked">
+			<div class="nav-cross" @click="d_isCrossClicked = !d_isCrossClicked">
 				<div class="crosss-bar one"></div>
 				<div class="crosss-bar two"></div>
 			</div>
@@ -45,7 +45,7 @@
 		name: "Navbar",
 		data() {
 			return {
-				isCrossClicked: false,
+				d_isCrossClicked: false,
 			};
 		}
 	};

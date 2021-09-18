@@ -1,0 +1,304 @@
+<template>
+	<div class="tab-content">
+		<h3>Add a new meeting</h3>
+		<hr />
+		<div class="add-meeting-form">
+			<div class="add-meeting-form-group">
+				<label
+					for="add-meeting-name"
+					class="add-meeting-form-group-label"
+					>Meeting's Name</label
+				>
+				<input
+					name="add-meeting-name"
+					type="text"
+					placeholder="Name for meeting"
+					v-model="d_meetingName"
+				/>
+			</div>
+			<div class="add-meeting-form-group">
+				<label
+					for="add-meeting-date"
+					class="add-meeting-form-group-label"
+					>Date</label
+				>
+				<input
+					name="add-meeting-date"
+					class="datepicker-input"
+					type="date"
+					v-model="d_meetingDate"
+				/>
+			</div>
+			<div class="add-meeting-form-group">
+				<label
+					for="meeting-start-time"
+					class="add-meeting-form-group-label"
+					>Start time (hh:mm)
+				</label>
+				<select
+					class="meeting-start-time-hr"
+					v-model="d_meetingStartTimeHr"
+				>
+					<option v-for="i in 24" :key="i" :value="i - 1">
+						{{ i - 1 }}
+					</option>
+				</select>
+				<span> : </span>
+				<select
+					class="meeting-start-time-min"
+					v-model="d_meetingStartTimeMin"
+				>
+					<option v-for="i in 60" :key="i" :value="i - 1">
+						{{ i - 1 }}
+					</option>
+				</select>
+			</div>
+			<div class="add-meeting-form-group">
+				<label
+					for="meeting-end-time"
+					class="add-meeting-form-group-label"
+					>End time (hh:mm)</label
+				>
+				<select
+					class="meeting-end-time-hr"
+					v-model="d_meetingEndTimeHr"
+				>
+					<option v-for="i in 24" :key="i" :value="i - 1">
+						{{ i - 1 }}
+					</option>
+				</select>
+				<span> : </span>
+				<select
+					class="meeting-start-time-min"
+					v-model="d_meetingEndTimeMin"
+				>
+					<option v-for="i in 60" :key="i" :value="i - 1">
+						{{ i - 1 }}
+					</option>
+				</select>
+			</div>
+			<div class="add-meeting-form-group">
+				<label
+					for="add-meeting-description"
+					class="add-meeting-form-group-label"
+					>Description</label
+				>
+				<textarea
+					name="add-meeting-description"
+					rows="1"
+					cols="40"
+					minlength="10"
+					placeholder="Search using words which describe a meeting"
+					v-model="d_meetingDescription"
+				></textarea>
+			</div>
+			<div class="add-meeting-form-group">
+				<label
+					for="add-meeting-members"
+					class="add-meeting-form-group-label"
+					>EmailIDs of attendees, or team's short</label
+				>
+				<input
+					name="add-meeting-members"
+					type="text"
+					placeholder="john@exapmle.com, @annual-day, mark@exapmle.com"
+					v-model="d_meetingAttendees"
+				/>
+				<p class="add-meeting-members-subtext">
+					Seperate emailids / team short names by commas - team short
+					names always begings with @
+				</p>
+			</div>
+			<button @click="m_addMeeting" class="add-meeting-btn">
+				Add meeting
+			</button>
+		</div>
+	</div>
+</template>
+
+<script>
+	import { s_users_getAllRegisteredUsers } from "@/services/userManagementServices.js";
+	import { s_meetings_addMeeting } from "@/services/meetingsServices.js";
+	export default {
+		name: "AddMeeting",
+		data() {
+			return {
+				d_status: "LOADING",
+				d_meetingName: "",
+				d_meetingDate: new Date().toISOString().substr(0, 10),
+				d_meetingStartTimeHr: 0,
+				d_meetingStartTimeMin: 0,
+				d_meetingEndTimeHr: 0,
+				d_meetingEndTimeMin: 0,
+				d_meetingDescription: "",
+				d_meetingAttendees: "",
+				d_registeredUsers: [],
+			};
+		},
+		methods: {
+			async m_getAllUsers() {
+				try {
+					const response = await s_users_getAllRegisteredUsers();
+					this.d_registeredUsers = response;
+				} catch (err) {
+					this.status = "ERROR";
+					this.error = err;
+				}
+			},
+			async m_addMeeting() {
+				try {
+					if (this.d_meetingName !== "") {
+						if (
+							new Date() <
+							new Date(this.d_meetingDate).setHours(
+								this.d_meetingStartTimeHr,
+								this.d_meetingStartTimeMin
+							)
+						) {
+							if (
+								this.d_meetingStartTimeHr +
+									this.d_meetingStartTimeMin / 60 <
+								this.d_meetingEndTimeHr +
+									this.d_meetingEndTimeMin / 60
+							) {
+								if (this.d_meetingDescription.length > 0) {
+									let usersToAddEmailList =
+										this.d_meetingAttendees.split(",");
+									let usersToAddObjectList = [];
+									usersToAddEmailList.forEach((user) => {
+										const userToAdd =
+											this.d_registeredUsers.find((value) => {
+												return value.email == user.trim();
+											});
+
+										if (userToAdd === undefined) {
+											if (user.trim().length > 1) {
+												throw {
+													message: "Wrong EmailId",
+													email: user.trim(),
+												};
+											}
+										} else {
+											usersToAddObjectList.push({
+												email: userToAdd.email,
+												value: userToAdd._id.toString(),
+											});
+										}
+									});
+
+									const startTime = {
+										hours: this.d_meetingStartTimeHr,
+										minutes: this.d_meetingStartTimeMin,
+									};
+									const endTime = {
+										hours: this.d_meetingEndTimeHr,
+										minutes: this.d_meetingEndTimeMin,
+									};
+
+									await s_meetings_addMeeting(
+										this.d_meetingName,
+										this.d_meetingDescription,
+										new Date(this.d_meetingDate)
+											.toISOString()
+											.substr(0, 10),
+										startTime,
+										endTime,
+										usersToAddObjectList
+									);
+								} else {
+									throw {
+										message: "Invalid Description",
+										value: this.d_meetingDescription,
+									};
+								}
+							} else {
+								throw {
+									message: "Invalid End Time",
+									value: "",
+								};
+							}
+						} else {
+							throw {
+								message: "Invalid Meeting Start Time and Date",
+								value: new Date(this.d_meetingDate).setHours(
+									this.d_meetingStartTimeHr,
+									this.d_meetingStartTimeMin
+								),
+							};
+						}
+					} else {
+						throw {
+							message: "Invalid Meeting Name",
+							value: this.d_meetingName,
+						};
+					}
+				} catch (err) {
+					console.log(err);
+				}
+			},
+		},
+		created() {
+			this.m_getAllUsers();
+		},
+	};
+</script>
+
+<style scoped>
+	h3 {
+		color: #fff;
+	}
+
+	.add-meeting-btn {
+		border-radius: 5px;
+		margin-bottom: 1em;
+		border: none;
+		font-size: 0.9em;
+		height: 2.5em;
+		margin: 5px 0px;
+		padding: 0px 24px;
+		line-height: 1.75;
+		background-color: #18a2b8;
+		color: #fff;
+	}
+
+	.add-meeting-form {
+		margin: 20px 0;
+	}
+
+	.add-meeting-form-group {
+		margin: 25px 0;
+	}
+
+	.add-meeting-form-group-label {
+		display: block;
+		margin: 10px 0;
+	}
+
+	.add-meeting-form-group textarea,
+	.add-meeting-form-group input {
+		padding: 0.5em;
+		width: 100%;
+		outline: none;
+		border-radius: 5px;
+		border: none;
+	}
+
+	.add-meeting-form-group textarea {
+		height: 4em;
+	}
+
+	.add-meeting-form-group select {
+		padding: 0.5em;
+		outline: none;
+		border-radius: 5px;
+		border: none;
+	}
+
+	.add-meeting-members-subtext {
+		font-size: 0.7em;
+	}
+
+	.add-meeting-btn:active {
+		transform: translateY(4px);
+	}
+</style>
