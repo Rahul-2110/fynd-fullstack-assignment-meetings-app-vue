@@ -10,6 +10,7 @@
 					:key="meeting._id"
 				>
 					<app-meeting
+						:p_registeredUsers="p_registeredUsers"
 						:p_meeting="meeting"
 						v-on:e_SearchMeetingsResult_excuseYourself="
 							m_excuseYourselfFromMeeting
@@ -34,6 +35,10 @@
 		name: "SearchMeetingsResult",
 		components: { AppMeeting: Meeting },
 		props: {
+			p_registeredUsers:{
+				type: Array,
+				required: true	
+			},
 			p_meetingsList: {
 				type: Array,
 				default: () => [],
@@ -46,7 +51,7 @@
 			m_addAttendeeToMeeting(meetingId, userId) {
 				this.$emit("e_SearchMeetings_addAttendee", meetingId, userId);
 			},
-		},
+		}
 	};
 </script>
 

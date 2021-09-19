@@ -117,7 +117,7 @@
 </template>
 
 <script>
-	import { s_users_getAllRegisteredUsers } from "@/services/userManagementServices.js";
+	import { s_teams_getMyTeams } from "@/services/teamsServices.js";
 	import { s_meetings_addMeeting } from "@/services/meetingsServices.js";
 	export default {
 		name: "AddMeeting",
@@ -132,17 +132,24 @@
 				d_meetingEndTimeMin: 0,
 				d_meetingDescription: "",
 				d_meetingAttendees: "",
-				d_registeredUsers: [],
+				d_myTeams: [],
+				d_error:""
 			};
 		},
+		props:{
+			p_registeredUsers:{
+				type: Array,
+				required: true
+			}
+		},
 		methods: {
-			async m_getAllUsers() {
+			async m_getMyTeams() {
 				try {
-					const response = await s_users_getAllRegisteredUsers();
-					this.d_registeredUsers = response;
+					const response = await s_teams_getMyTeams();
+					this.d_myTeams = response;
 				} catch (err) {
-					this.status = "ERROR";
-					this.error = err;
+					this.d_status = "ERROR";
+					this.d_error = err;
 				}
 			},
 			async m_addMeeting() {
@@ -162,27 +169,76 @@
 									this.d_meetingEndTimeMin / 60
 							) {
 								if (this.d_meetingDescription.length > 0) {
-									let usersToAddEmailList =
+									let participantsToAdd =
 										this.d_meetingAttendees.split(",");
 									let usersToAddObjectList = [];
-									usersToAddEmailList.forEach((user) => {
-										const userToAdd =
-											this.d_registeredUsers.find((value) => {
-												return value.email == user.trim();
-											});
+									participantsToAdd.forEach((participantName) => {
+										const trimmedParticipantName =
+											participantName.trim();
+										if (trimmedParticipantName[0] === "@") {
+											const teamToAdd = this.d_myTeams.find(
+												(value) => {
+													return (
+														value.shortName ===
+														trimmedParticipantName.slice(
+															1
+														)
+													);
+												}
+											);
 
-										if (userToAdd === undefined) {
-											if (user.trim().length > 1) {
+											if (teamToAdd === undefined) {
+												console.log(
+													typeof trimmedParticipantName
+												);
 												throw {
-													message: "Wrong EmailId",
-													email: user.trim(),
+													message:
+														"Wrong Team Short Name",
+													email: trimmedParticipantName,
 												};
+											} else {
+												teamToAdd.members.forEach(
+													(user) => {
+														usersToAddObjectList.push({
+															email: user.email,
+															value: user.userId
+														});
+													}
+												);
+												// usersToAddObjectList.concat(
+												// 	teamToAdd.members
+												// );
 											}
 										} else {
-											usersToAddObjectList.push({
-												email: userToAdd.email,
-												value: userToAdd._id.toString(),
-											});
+											const userToAdd =
+												this.p_registeredUsers.find(
+													(value) => {
+														return (
+															value.email ==
+															trimmedParticipantName
+														);
+													}
+												);
+
+											if (userToAdd === undefined) {
+												if (
+													trimmedParticipantName.length >
+													1
+												) {
+													console.log(
+														typeof trimmedParticipantName
+													);
+													throw {
+														message: "Wrong EmailId",
+														email: trimmedParticipantName
+													};
+												}
+											} else {
+												usersToAddObjectList.push({
+													email: userToAdd.email,
+													userId: userToAdd._id.toString()
+												});
+											}
 										}
 									});
 
@@ -237,9 +293,10 @@
 				}
 			},
 		},
-		created() {
-			this.m_getAllUsers();
-		},
+		async created() {
+			await this.m_getMyTeams();
+			this.d_status = "LOADED";
+		}
 	};
 </script>
 

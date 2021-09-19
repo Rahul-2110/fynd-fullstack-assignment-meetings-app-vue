@@ -31,7 +31,7 @@
 						Select a member
 					</option>
 					<option
-						v-for="user in d_registeredUsers"
+						v-for="user in p_registeredUsers"
 						:key="user._id"
 						:value="user._id"
 					>
@@ -56,33 +56,28 @@
 </template>
 
 <script>
-	import { s_users_getAllRegisteredUsers } from "@/services/userManagementServices.js";
 	import { monthsMixin, weekDaysMixin } from "@/mixins/dateMixin.js";
 	export default {
         name: "Meeting",
         mixins: [monthsMixin, weekDaysMixin],
         data() {
 			return {
-				d_registeredUsers: [],
 				d_selectedUser: "",
+				d_error:"",
+				d_status:"LOADING",
 			};
 		},
         props:{
+			p_registeredUsers:{
+				type: Array,
+				required: true
+			},
             p_meeting:{
                 type: Object,
                 required: true
             }
         },
 		methods: {
-			async m_getAllUsers() {
-				try {
-					const response = await s_users_getAllRegisteredUsers();
-					this.d_registeredUsers = response;
-				} catch (err) {
-					this.status = "ERROR";
-					this.error = err;
-				}
-			},
 			m_getDateInReadableFormat(date) {
 				date = new Date(date);
 				return (
@@ -122,7 +117,7 @@
 			},
 		},
 		created() {
-			this.m_getAllUsers();
+			this.d_status ="LOADED";
 		}
     };
 </script>

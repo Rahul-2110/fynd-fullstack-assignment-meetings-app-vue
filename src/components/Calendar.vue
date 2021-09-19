@@ -135,8 +135,8 @@
 				}
 			},
 		},
-		created() {
-			this.m_getMeetings();
+		async created() {
+			await this.m_getMeetings();
 			this.d_status = "LOADED";
 		},
 	};

@@ -40,7 +40,7 @@ const s_meetings_addAttendeeToMeeting = async (meetingId, userId) => {
 			params: {
 				action: "add_attendee",
 				userId: userId,
-			},
+			}
 		}
 	);
 	return response.data;
@@ -53,7 +53,7 @@ const s_meetings_excuseYourselfFromAMeeting = async (meetingId) => {
 		{
 			params: {
 				action: "remove_attendee",
-			},
+			}
 		}
 	);
 	return response.data;

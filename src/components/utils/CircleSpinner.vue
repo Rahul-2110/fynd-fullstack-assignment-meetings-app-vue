@@ -1,9 +1,12 @@
 <template>
-	<div class="loading">
+<div class="spinner-container">
+  <div class="loading">
 		<div class="part1"></div>
 		<div class="part2"></div>
 		<div class="part3"></div>
 	</div>
+</div>
+	
 </template>
 
 <script>
@@ -13,6 +16,16 @@
 </script>
 
 <style scoped>
+
+.spinner-container {
+  height: 100vh;
+  width: 100vw;
+  z-index: 10;
+  background-color: #f8f9fabb;
+  display: flex;
+  align-items: center;
+}
+
 .loading {
   line-height: 0;
   margin: 100px auto 0;

@@ -42,6 +42,7 @@
 		<template v-if="d_showSearchedMeetings">
 			<search-meetings-result
 				:p_meetingsList="d_searchedMeetingsList"
+				:p_registeredUsers="p_registeredUsers"
 				v-on:e_SearchMeetings_excuseYourself="m_excuseYourselfFromMeeting"
                 v-on:e_SearchMeetings_addAttendee="m_addAttendeeToMeeting"
 			></search-meetings-result>
@@ -66,7 +67,14 @@
 				d_searchedMeetingsList: [],
 				d_showSearchedMeetings: false,
 				d_status: "LOADING",
+				d_error:""
 			};
+		},
+		props:{
+			p_registeredUsers:{
+				type: Array,
+				required: true
+			}
 		},
 		methods: {
 			async m_getSearchedMeetings() {
@@ -79,7 +87,7 @@
 					this.d_searchedMeetingsList = response;
 				} catch (err) {
 					this.d_status = "ERROR";
-					this.error = err;
+					this.d_error = err;
 				}
 			},
 			async m_excuseYourselfFromMeeting(meetingId) {
@@ -89,7 +97,7 @@
 				} catch (err) {
 					console.log(err);
 					this.d_status = "ERROR";
-					this.error = err;
+					this.d_error = err;
 				}
 			},
             async m_addAttendeeToMeeting(meetingId, userId){
@@ -99,10 +107,10 @@
 				} catch (err) {
 					console.log(err);
 					this.d_status = "ERROR";
-					this.error = err;
+					this.d_error = err;
 				}
             }
-		},
+		}
 	};
 </script>
 
