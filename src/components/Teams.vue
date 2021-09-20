@@ -79,7 +79,7 @@
 			async m_getMyTeams() {
 				try {
 					const response = await s_teams_getMyTeams();
-					console.log(response);
+					// console.log(response);
 					this.d_myTeams = response;
 				} catch (err) {
 					this.d_status = "ERROR";
@@ -90,7 +90,7 @@
 				try {
 					this.d_status = "LOADING";
 					const response = await s_teams_addMemberToTeam(teamId, userId);
-					console.log(response);
+					// console.log(response);
 					this.m_getMyTeams();
 					this.d_status ="LOADED";
 				} catch (err) {
@@ -104,7 +104,7 @@
 					const response = await s_teams_excuseYourselfFromMeeting(
 						teamId
 					);
-					console.log(response);
+					// console.log(response);
 					this.m_getMyTeams();
 					this.d_status ="LOADED";
 				} catch (err) {
@@ -123,7 +123,7 @@
 						description,
 						members
 					);
-					console.log(response);
+					// console.log(response);
 					this.m_getMyTeams();
 					this.d_status ="LOADED";
 				} catch (err) {

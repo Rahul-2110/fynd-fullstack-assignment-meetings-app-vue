@@ -1,5 +1,15 @@
 <template>
 	<div>
+		<template v-if="d_status === 'LOADING'">
+			<CircleSpinner />
+		</template>
+		<template v-else-if="d_status === 'ERROR'">
+			<!-- <ErrorBox
+				:d_status="error.response.d_status"
+				:message="error.response.d_statusText"
+			/> -->
+		</template>
+		<template v-else-if="d_status === 'LOADED'">
 		<div class="tab-content">
 			<h3>Search for meetings</h3>
 			<hr />
@@ -46,6 +56,7 @@
 				v-on:e_SearchMeetings_excuseYourself="m_excuseYourselfFromMeeting"
                 v-on:e_SearchMeetings_addAttendee="m_addAttendeeToMeeting"
 			></search-meetings-result>
+		</template>
 		</template>
 	</div>
 </template>
@@ -110,6 +121,9 @@
 					this.d_error = err;
 				}
             }
+		},
+		created(){
+			this.d_status="LOADED";
 		}
 	};
 </script>

@@ -4,6 +4,7 @@ import AppCalendar from '@/components/Calendar.vue';
 import AppMeetings from '@/components/Meetings.vue';
 import AppTeams from '@/components/Teams.vue';
 import AppLogin from '@/components/Login.vue';
+import SignUp from '@/components/SignUp.vue';
 import BaseView from '@/views/BaseView.vue';
 
 const router = new VueRouter({
@@ -11,8 +12,13 @@ const router = new VueRouter({
     routes:[
         {
             name: 'login',
-            path: '/',
+            path: '/login',
             component: AppLogin
+        },
+        {
+            name: 'signup',
+            path: '/signup',
+            component: SignUp
         },
         {
             path: '/',

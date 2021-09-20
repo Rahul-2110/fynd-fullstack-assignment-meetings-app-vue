@@ -32,7 +32,7 @@
 			<div class="user-greeting">
 				<p>Hello, <span class="active">janedoe@example.com</span></p>
 			</div>
-			<router-link class="nav-link nav-logout" to="/">Logout</router-link>
+			<router-link class="nav-link nav-logout" to="/login">Logout</router-link>
 			<!-- <div class="nav-logout">
             <a href="">Logout</a>
             </div> -->

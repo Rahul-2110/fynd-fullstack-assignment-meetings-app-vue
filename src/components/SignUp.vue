@@ -4,7 +4,16 @@
 			<span class="main-title text-uppercase text-center">Meetings</span>
 			<p class="subtitle text-center"><span class="by">By</span> Rahul</p>
 		</div>
-
+		<div class="form-group">
+			<input
+				name="name"
+				class="form-control"
+				placeholder="Name"
+				autofocus="autofocus"
+				type="text"
+				v-model="d_name"
+			/>
+		</div>
 		<div class="form-group">
 			<input
 				name="email"
@@ -24,65 +33,95 @@
 				v-model="d_password"
 			/>
 		</div>
-		<div class="form-group subform">
-			<label class="checkbox-inline" for="UserRememberMe">
-				<input
-					type="checkbox"
-					name="rememberMe"
-					value="1"
-					id="UserRememberMe"
-				/>Remember me
-			</label>
-			<a href="#" class="resetpassword">Reset Password</a>
+		<div class="form-group">
+			<input
+				name="password"
+				class="form-control"
+				placeholder="Confirm Password"
+				type="password"
+				v-model="d_confirmPassword"
+			/>
 		</div>
-		<button @click.prevent="m_login" class="login-form-btn">Login</button>
+		<button @click.prevent="m_validateAndRegister" class="login-form-btn">
+			Register
+		</button>
 		<div class="form-group text-center">
-			<router-link to="/signup"
-				><p class="login-form-type">
-					Sign Up
-				</p></router-link
+			<router-link to="/login"
+				><p class="login-form-type">Login</p></router-link
 			>
 		</div>
 	</form>
 </template>
 
 <script>
-	import { s_users_meetingslogin } from "@/services/userManagementServices.js";
+	import { s_users_meetingsRegister } from "@/services/userManagementServices.js";
 	import router from "@/router/routes.js";
 	export default {
 		name: "Login",
 		router,
 		data() {
 			return {
-				d_email: null,
-				d_password: null,
+				d_email: "",
+				d_password: "",
 				d_emailReg:
 					/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
 				d_passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
+				d_confirmPassword: "",
+				d_name: "",
 			};
 		},
 		methods: {
-			async m_validate() {
+			async m_regiterUser() {
 				try {
-					const data = await s_users_meetingslogin(this.d_email, this.d_password);
-					console.log(data.token);
-					this.$router.push({ path: "/calendar" });
+					const data = await s_users_meetingsRegister(
+						this.d_name,
+						this.d_email,
+						this.d_password
+					);
+					this.$router.push({ path: "/login" });
 				} catch (error) {
 					console.log("There was some error\n" + error.message);
 				}
 			},
-			m_login() {
-				if (this.d_email != null && this.d_emailReg.test(this.d_email)) {
-					if (
-						this.d_password != null &&
-						this.d_passwordReg.test(this.d_password)
-					) {
-						this.m_validate();
+			m_validateAndRegister() {
+				try {
+					if (this.d_name != "") {
+						if (
+							this.d_email != "" &&
+							this.d_emailReg.test(this.d_email)
+						) {
+							if (
+								this.d_password != null &&
+								this.d_passwordReg.test(this.d_password)
+							) {
+								if (this.d_password === this.d_confirmPassword) {
+									this.m_regiterUser();
+								} else {
+									throw {
+										message: "Password doesn't match",
+										value: '',
+									};
+								}
+							} else {
+								throw {
+									message: "Invalid Password",
+									value: '',
+								};
+							}
+						} else {
+							throw {
+								message: "Invalid Email",
+								value: this.d_email,
+							};
+						}
 					} else {
-						console.log("Check password");
+						throw {
+							message: "Invalid Name",
+							value: this.d_name,
+						};
 					}
-				} else {
-					console.log("Check email address");
+				} catch (err) {
+					console.log(err);
 				}
 			},
 		},
@@ -156,36 +195,6 @@
 		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
 			0 0 8px rgba(102, 175, 233, 0.6);
 	}
-
-	.subform {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 15px;
-		align-items: center;
-	}
-
-	.checkbox-inline {
-		position: relative;
-		padding-left: 20px;
-		margin-bottom: 0;
-		vertical-align: middle;
-		cursor: pointer;
-		font-size: 16px;
-	}
-
-	.checkbox-inline input[type="checkbox"] {
-		position: absolute;
-		margin-left: -20px;
-	}
-
-	.resetpassword {
-		color: #a6a6a6;
-		font-weight: 400;
-		text-decoration: none;
-		font-size: 13px;
-		margin-left: 20px;
-	}
-
 	.login-form-btn {
 		margin-top: 2em;
 		width: 100%;
@@ -218,10 +227,10 @@
 		text-decoration: underline;
 	}
 
-	a{
-        text-decoration: none;
-    }
-    
+	a {
+		text-decoration: none;
+	}
+
 	.login-form-type:hover {
 		color: #4a8ad9;
 	}
@@ -233,6 +242,4 @@
 	.text-center {
 		text-align: center;
 	}
-
-	
 </style>
