@@ -1,12 +1,10 @@
 import axios from 'axios';
-import AppConfig from '@/config';
-
-const { apiToken } = AppConfig;
+import store from '@/stores';
 
 axios.interceptors.request.use(
     request => {
         if( request.url.includes( 'calendar' ) || request.url.includes( 'meetings' ) || request.url.includes( 'users' ) || request.url.includes( 'teams' )  )  {
-            request.headers['Authorization'] =  apiToken;
+            request.headers['Authorization'] =   store.state.auth.token;
         }
         return request;
     },

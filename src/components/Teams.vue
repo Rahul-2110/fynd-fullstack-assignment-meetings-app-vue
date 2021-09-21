@@ -20,7 +20,6 @@
 							v-for="team in d_myTeams"
 							:key="team._id"
 							:p_team="team"
-							:p_registeredUsers="d_registeredUsers"
 							v-on:e_Teams_addMemberToTeam="m_addMemberToTeam"
 							v-on:e_Teams_excuseYourselfFromTeam="
 								m_excuseYourselfFromTeam
@@ -36,7 +35,6 @@
 					v-on:e_Teams_addTeam="m_addTeam"
 					v-on:e_Teams_closeAddTeam="d_addTeam = false"
 					v-if="d_addTeam"
-					:p_registeredUsers="d_registeredUsers"
 					:p_myTeams="d_myTeams"
 				></add-team>
 			</div>
@@ -45,7 +43,6 @@
 </template>
 
 <script>
-	import { s_users_getAllRegisteredUsers } from "@/services/userManagementServices.js";
 	import {
 		s_teams_getMyTeams,
 		s_teams_addMemberToTeam,
@@ -62,20 +59,10 @@
 				d_status: "LOADING",
 				d_myTeams: [],
 				d_error: "",
-				d_registeredUsers: [],
 				d_addTeam: false,
 			};
 		},
 		methods: {
-			async m_getAllUsers() {
-				try {
-					const response = await s_users_getAllRegisteredUsers();
-					this.d_registeredUsers = response;
-				} catch (err) {
-					this.d_status = "ERROR";
-					this.d_error = err;
-				}
-			},
 			async m_getMyTeams() {
 				try {
 					const response = await s_teams_getMyTeams();
@@ -135,7 +122,6 @@
 		},
 		async created() {
 			await this.m_getMyTeams();
-			await this.m_getAllUsers();
 			this.d_status = "LOADED";
 		},
 	};

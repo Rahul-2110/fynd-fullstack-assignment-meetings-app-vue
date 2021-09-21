@@ -52,7 +52,6 @@
 		<template v-if="d_showSearchedMeetings">
 			<search-meetings-result
 				:p_meetingsList="d_searchedMeetingsList"
-				:p_registeredUsers="p_registeredUsers"
 				v-on:e_SearchMeetings_excuseYourself="m_excuseYourselfFromMeeting"
                 v-on:e_SearchMeetings_addAttendee="m_addAttendeeToMeeting"
 			></search-meetings-result>
@@ -82,10 +81,6 @@
 			};
 		},
 		props:{
-			p_registeredUsers:{
-				type: Array,
-				required: true
-			}
 		},
 		methods: {
 			async m_getSearchedMeetings() {

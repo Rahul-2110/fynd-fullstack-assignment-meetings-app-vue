@@ -47,7 +47,6 @@
 </template>
 
 <script>
-	import { s_users_meetingslogin } from "@/services/userManagementServices.js";
 	import router from "@/router/routes.js";
 	export default {
 		name: "Login",
@@ -64,8 +63,8 @@
 		methods: {
 			async m_validate() {
 				try {
-					const data = await s_users_meetingslogin(this.d_email, this.d_password);
-					console.log(data.token);
+					await this.$store.dispatch( 'auth/login', {email: this.d_email, password: this.d_password});
+					await this.$store.dispatch( 'users/getRegisteredUsers');
 					this.$router.push({ path: "/calendar" });
 				} catch (error) {
 					console.log("There was some error\n" + error.message);

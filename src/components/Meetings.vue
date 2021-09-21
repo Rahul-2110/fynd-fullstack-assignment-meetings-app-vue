@@ -21,15 +21,23 @@
 							id="tabone"
 							checked="checked"
 						/>
-						<label  @click="d_searchMeeting = true" for="tabone">Filter / Search meetings</label>
+						<label @click="d_searchMeeting = true" for="tabone"
+							>Filter / Search meetings</label
+						>
 						<div class="tab">
-							<search-meetings v-if="d_searchMeeting" :p_registeredUsers="d_registeredUsers"></search-meetings>
+							<search-meetings
+								v-if="d_searchMeeting"
+							></search-meetings>
 						</div>
 
 						<input type="radio" name="tabs" id="tabtwo" />
-						<label @click="d_searchMeeting = false" for="tabtwo">Add a meeting</label>
+						<label @click="d_searchMeeting = false" for="tabtwo"
+							>Add a meeting</label
+						>
 						<div class="tab">
-							<add-meeting v-if="c_addMeeting" :p_registeredUsers="d_registeredUsers"></add-meeting>
+							<add-meeting
+								v-if="c_addMeeting"
+							></add-meeting>
 						</div>
 					</div>
 				</div>
@@ -40,40 +48,27 @@
 
 <script>
 
-	import { s_users_getAllRegisteredUsers } from "@/services/userManagementServices.js";
 	import SearchMeetings from "@/components/SearchMeetings.vue";
 	import AddMeeting from "@/components/AddMeeting.vue";
 	export default {
-		components: { SearchMeetings , AddMeeting },
+		components: { SearchMeetings, AddMeeting },
 		name: "Meetings",
 		data() {
 			return {
 				d_status: "LOADING",
 				d_searchMeeting: true,
-				d_error:"",
-				d_registeredUsers:[]
+				d_error: "",
 			};
 		},
-		computed:{
-			c_addMeeting(){
+		computed: {
+			c_addMeeting() {
 				return !this.d_searchMeeting;
 			}
 		},
-		methods: {
-			async m_getAllUsers() {
-				try {
-					const response = await s_users_getAllRegisteredUsers();
-					this.d_registeredUsers = response;
-				} catch (err) {
-					this.d_status = "ERROR";
-					this.d_error = err;
-				}
-			},
-		},
+		methods: {},
 		async created() {
-			await this.m_getAllUsers();
 			this.d_status = "LOADED";
-		}
+		},
 	};
 </script>
 
@@ -146,7 +141,6 @@
 		display: block;
 	}
 
-	
 	.display-hidden {
 		display: none;
 	}

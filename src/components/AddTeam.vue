@@ -48,7 +48,7 @@
 								Select a member
 							</option>
 							<option
-								v-for="user in p_registeredUsers"
+								v-for="user in s_registeredUsers"
 								:key="user._id"
 								:value="user._id"
 							>
@@ -93,10 +93,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 	export default {
 		name: "AddTeam",
 		props: {
-			p_registeredUsers: {
+			s_registeredUsers: {
 				type: Array,
 				required: true,
 			},
@@ -116,9 +117,14 @@
 				d_error: "",
 			};
 		},
+		computed:{
+			...mapState({
+				s_registeredUsers: (state) => state.users.registeredUsers
+			}),
+		},
 		methods: {
 			m_addMemberToTeam() {
-				const userToAdd = this.p_registeredUsers.find((value) => {
+				const userToAdd = this.s_registeredUsers.find((value) => {
 					return value._id === this.d_selectedUserId;
 				});
 				if (userToAdd !== undefined) {
@@ -184,7 +190,7 @@
 		position: fixed;
 		top: 20%;
 		left: 50%;
-		width: 80%;
+		width: 70%;
 		height: 70vh;
 		background-color: #18a2b8;
 		color: #fff;

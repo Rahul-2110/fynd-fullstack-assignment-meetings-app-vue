@@ -6,13 +6,20 @@
             <span>A LOGO</span>
             </a> -->
 
-			<div class="nav-cross" @click="d_isCrossClicked = !d_isCrossClicked">
+			<div
+				class="nav-cross"
+				@click="d_isCrossClicked = !d_isCrossClicked"
+			>
 				<div class="crosss-bar one"></div>
 				<div class="crosss-bar two"></div>
 			</div>
 
 			<div class="nav-links">
-				<router-link class="nav-link" to="/calendar" active-class="active" exact
+				<router-link
+					class="nav-link"
+					to="/calendar"
+					active-class="active"
+					exact
 					>Calender</router-link
 				>
 				<router-link
@@ -30,9 +37,13 @@
 			</div>
 
 			<div class="user-greeting">
-				<p>Hello, <span class="active">janedoe@example.com</span></p>
+				<p>
+					Hello, <span class="active">{{ c_userEmailId }}</span>
+				</p>
 			</div>
-			<router-link class="nav-link nav-logout" to="/login">Logout</router-link>
+			<a class="nav-link nav-logout" href="#" @click.prevent="m_logout"
+				>Logout</a
+			>
 			<!-- <div class="nav-logout">
             <a href="">Logout</a>
             </div> -->
@@ -41,13 +52,27 @@
 </template>
 
 <script>
+	import { mapState } from "vuex";
+	import router from "@/router/routes.js";
 	export default {
 		name: "Navbar",
+		router,
 		data() {
 			return {
 				d_isCrossClicked: false,
 			};
-		}
+		},
+		computed: {
+			...mapState({
+				c_userEmailId: (state) => state.auth.email,
+			}),
+		},
+		methods: {
+			m_logout() {
+				this.$store.dispatch("auth/logout");
+				this.$router.push({ path: "/login" });
+			},
+		},
 	};
 </script>
 
@@ -126,7 +151,7 @@
 
 	.nav-logout {
 		order: 3;
-        color: #a3a4a5;
+		color: #a3a4a5;
 	}
 	.nav-logout a {
 		color: #a3a4a5;

@@ -98,7 +98,7 @@
 				);
 			},
 			c_selectedDay() {
-				let date = new Date(this.selectedDate);
+				let date = new Date(this.d_selectedDate);
 				return this.WeekDays[date.getDay()];
 			},
 			c_meetingsPosition() {

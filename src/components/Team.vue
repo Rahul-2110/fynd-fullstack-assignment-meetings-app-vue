@@ -26,7 +26,7 @@
 						Select a member
 					</option>
 					<option
-						v-for="user in p_registeredUsers"
+						v-for="user in s_registeredUsers"
 						:key="user._id"
 						:value="user._id"
 					>
@@ -44,18 +44,19 @@
 </template>
 
 <script>
-	
+	import { mapState } from "vuex";
 	export default {
 		name: "Team",
 		props: {
 			p_team: {
 				type: Object,
 				required: true
-			},
-			p_registeredUsers: {
-				type: Array,
-				required: true
 			}
+		},
+		computed:{
+			...mapState({
+				s_registeredUsers: (state) => state.users.registeredUsers
+			}),
 		},
 		data() {
 			return {

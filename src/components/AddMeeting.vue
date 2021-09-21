@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 	import { s_teams_getMyTeams } from "@/services/teamsServices.js";
 	import { s_meetings_addMeeting } from "@/services/meetingsServices.js";
 	export default {
@@ -136,11 +137,13 @@
 				d_error:""
 			};
 		},
+		computed:{
+			...mapState({
+				s_registeredUsers: (state) => state.users.registeredUsers
+			}),
+		},
 		props:{
-			p_registeredUsers:{
-				type: Array,
-				required: true
-			}
+		
 		},
 		methods: {
 			async m_getMyTeams() {
@@ -211,7 +214,7 @@
 											}
 										} else {
 											const userToAdd =
-												this.p_registeredUsers.find(
+												this.s_registeredUsers.find(
 													(value) => {
 														return (
 															value.email ==

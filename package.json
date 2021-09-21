@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "copynormalize": "cpx \"./node_modules/normalize.css/normalize.css\" \"src/external/css\"",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -12,10 +11,10 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
-    "cpx": "^1.5.0",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.11",
-    "vue-router": "^3.5.2"
+    "vue-router": "^3.5.2",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

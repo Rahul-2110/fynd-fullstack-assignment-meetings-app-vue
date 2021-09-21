@@ -21,7 +21,6 @@
 							:key="meeting._id"
 						>
 							<app-meeting
-								:p_registeredUsers="p_registeredUsers"
 								:p_meeting="meeting"
 								v-on:e_SearchMeetingsResult_excuseYourself="
 									m_excuseYourselfFromMeeting
@@ -53,10 +52,6 @@
 			};
 		},
 		props: {
-			p_registeredUsers: {
-				type: Array,
-				required: true,
-			},
 			p_meetingsList: {
 				type: Array,
 				default: () => [],
