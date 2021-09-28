@@ -33,7 +33,7 @@ const s_teams_addMemberToTeam = async (teamId, userId) => {
 };
 
 const s_teams_excuseYourselfFromMeeting = async (teamId) => {
-	console.log(teamId);
+	
 	const response = await axios.patch(
 		`${apiBaseUrl}/teams/${teamId}`,
 		{},

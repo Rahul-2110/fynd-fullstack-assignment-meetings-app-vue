@@ -5,7 +5,7 @@ const KEY_REGISTERED_USERS = "registeredUsers";
 const users = {
 	namespaced: true,
 	state: {
-		registeredUsers: localStorage.getItem(KEY_REGISTERED_USERS) || "",
+		registeredUsers: JSON.parse(localStorage.getItem(KEY_REGISTERED_USERS)) || "",
 	},
 	mutations: {
 		setRegisteredUsers(state, registeredUsers) {
@@ -15,9 +15,8 @@ const users = {
 	actions: {
 		getRegisteredUsers({ commit }) {
 			return s_users_getAllRegisteredUsers().then((data) => {
-				console.log(data);
 				const registeredUsers = data;
-				localStorage.setItem(KEY_REGISTERED_USERS, registeredUsers);
+				localStorage.setItem(KEY_REGISTERED_USERS, JSON.stringify(registeredUsers));
 				commit("setRegisteredUsers", registeredUsers);
 			});
 		},

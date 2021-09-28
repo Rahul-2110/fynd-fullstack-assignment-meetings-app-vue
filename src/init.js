@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import '@/services/configureAxios';
 import Router from 'vue-router';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import ClockSpinner from '@/components/utils/ClockSpinner';
 import CircleSpinner from '@/components/utils/CircleSpinner';

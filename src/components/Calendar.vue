@@ -123,16 +123,24 @@
 		},
 		methods: {
 			async m_getMeetings() {
+				this.d_status = "LOADING";
 				try {
-					const response = await s_calender_getMeetingsOnADate(
+					if(this.d_selectedDate !== ""){
+						const response = await s_calender_getMeetingsOnADate(
 						new Date(this.d_selectedDate).toISOString().split("T")[0]
 					);
 					this.d_meetings = response;
+					}
+					else{
+						this.d_selectedDate = new Date().toISOString().substr(0, 10);
+					}
+					
 					// console.log(this.meetings);
 				} catch (err) {
 					this.d_status = "ERROR";
 					this.d_error = err;
 				}
+				this.d_status = "LOADED";
 			},
 		},
 		async created() {

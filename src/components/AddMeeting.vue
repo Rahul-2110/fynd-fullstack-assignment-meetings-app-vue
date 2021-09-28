@@ -191,9 +191,7 @@ import { mapState } from "vuex";
 											);
 
 											if (teamToAdd === undefined) {
-												console.log(
-													typeof trimmedParticipantName
-												);
+												
 												throw {
 													message:
 														"Wrong Team Short Name",

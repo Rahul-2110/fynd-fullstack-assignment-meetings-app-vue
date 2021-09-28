@@ -113,7 +113,11 @@ router.beforeEach((to, from, next) => {
 	const isLoggedIn = store.getters["auth/isAuthenticated"];
 	if (to.name !== "login" && !isLoggedIn) {
 		next({ name: "login" });
-	} else {
+	}
+	else if(to.path === "/" && isLoggedIn){
+		next({ name: "calendar" })
+	} 
+	else {
 		const nearestWithTitle = to.matched
 			.slice()
 			.reverse()

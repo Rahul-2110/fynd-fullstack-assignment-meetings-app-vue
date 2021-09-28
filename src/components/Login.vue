@@ -31,6 +31,7 @@
 					name="rememberMe"
 					value="1"
 					id="UserRememberMe"
+					v-model="d_rememberMe"
 				/>Remember me
 			</label>
 			<a href="#" class="resetpassword">Reset Password</a>
@@ -55,15 +56,16 @@
 			return {
 				d_email: null,
 				d_password: null,
+				d_rememberMe: false,
 				d_emailReg:
 					/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
-				d_passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
+				// d_passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
 			};
 		},
 		methods: {
 			async m_validate() {
 				try {
-					await this.$store.dispatch( 'auth/login', {email: this.d_email, password: this.d_password});
+					await this.$store.dispatch( 'auth/login', {email: this.d_email, password: this.d_password, rememberMe: this.d_rememberMe});
 					await this.$store.dispatch( 'users/getRegisteredUsers');
 					this.$router.push({ path: "/calendar" });
 				} catch (error) {
@@ -72,10 +74,14 @@
 			},
 			m_login() {
 				if (this.d_email != null && this.d_emailReg.test(this.d_email)) {
+					// if (
+					// 	this.d_password != null &&
+					// 	this.d_passwordReg.test(this.d_password)
+					// ) 
 					if (
-						this.d_password != null &&
-						this.d_passwordReg.test(this.d_password)
-					) {
+						this.d_password != null 
+					) 
+					{
 						this.m_validate();
 					} else {
 						console.log("Check password");
@@ -92,7 +98,7 @@
 	.form-signin {
 		display: flex;
 		flex-direction: column;
-		max-width: 500px;
+		max-width: 400px;
 		padding: 15px;
 		margin: 6em auto;
 		color: #73c7d5;
