@@ -22,9 +22,7 @@
 
 <style>
 	.container {
-		height: 100vh;
-		margin: 120px 2em;
-		padding-bottom: 120px;
+		margin: 120px 2em 50px 2em;
 	}
 
 	hr {
@@ -39,8 +37,7 @@
 	}
 	@media (min-width: 768px) {
 		.container {
-			margin: 100px 3em;
-			padding-bottom: 100px;
+			margin: 100px 3em 50px  3em;
 		}
 	}
 </style>
