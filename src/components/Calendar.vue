@@ -5,8 +5,7 @@
 		</template>
 		<template v-else-if="d_status === 'ERROR'">
 			<ErrorBox
-				:status="d_error.response.status"
-				:message="d_error.response.statusText"
+				:error="d_error"
 			/>
 		</template>
 		<template v-else-if="d_status === 'LOADED'">
@@ -134,18 +133,17 @@
 					else{
 						this.d_selectedDate = new Date().toISOString().substr(0, 10);
 					}
-					
+					this.d_status = "LOADED";
 					// console.log(this.meetings);
 				} catch (err) {
-					this.d_status = "ERROR";
 					this.d_error = err;
+					this.d_status = "ERROR";
 				}
-				this.d_status = "LOADED";
+				
 			},
 		},
 		async created() {
 			await this.m_getMeetings();
-			this.d_status = "LOADED";
 		},
 	};
 </script>

@@ -1,8 +1,8 @@
 <template>
 	<div class="flex-center position-r full-height">
-		<div class="code">{{ status }}</div>
+		<div class="code">{{ error.name }}</div>
 
-		<div class="message" style="padding: 10px">{{ message }}</div>
+		<div class="message" style="padding: 10px">{{ error.message }}</div>
 	</div>
 </template>
 
@@ -10,14 +10,10 @@
 	export default {
 		name: "ErrorBox",
 		props: {
-			status: {
-				type: Number,
+			error: {
+				type: Error,
 				required: true
-			},
-			message: {
-				type: String,
-				required: true
-			},
+			}
 		},
 	};
 </script>

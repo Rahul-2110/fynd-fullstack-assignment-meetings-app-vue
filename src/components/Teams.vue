@@ -4,10 +4,9 @@
 			<CircleSpinner />
 		</template>
 		<template v-else-if="d_status === 'ERROR'">
-			<!-- <ErrorBox
-				:d_status="error.response.d_status"
-				:message="error.response.d_statusText"
-			/> -->
+			<ErrorBox
+				:error="d_error"
+			/>
 		</template>
 		<template v-else-if="d_status === 'LOADED'">
 			<div class="container">
@@ -68,9 +67,11 @@
 					const response = await s_teams_getMyTeams();
 					// console.log(response);
 					this.d_myTeams = response;
+					this.d_status = "LOADED";
 				} catch (err) {
-					this.d_status = "ERROR";
 					this.d_error = err;
+					this.d_status = "ERROR";
+					
 				}
 			},
 			async m_addMemberToTeam(teamId, userId) {
@@ -81,8 +82,9 @@
 					this.m_getMyTeams();
 					this.d_status ="LOADED";
 				} catch (err) {
-					this.d_status = "ERROR";
 					this.d_error = err;
+					this.d_status = "ERROR";
+					
 				}
 			},
 			async m_excuseYourselfFromTeam(teamId) {
@@ -96,8 +98,9 @@
 					this.d_status ="LOADED";
 				} catch (err) {
 					console.log(err);
-					this.d_status = "ERROR";
 					this.d_error = err;
+					this.d_status = "ERROR";
+					
 				}
 			},
 			async m_addTeam(name, shortName, description, members) {
@@ -114,15 +117,15 @@
 					this.m_getMyTeams();
 					this.d_status ="LOADED";
 				} catch (err) {
-					console.log(err);
-					this.d_status = "ERROR";
 					this.d_error = err;
+					this.d_status = "ERROR";
+					console.log(err);
+					
 				}
 			},
 		},
 		async created() {
 			await this.m_getMyTeams();
-			this.d_status = "LOADED";
 		},
 	};
 </script>

@@ -4,10 +4,9 @@
 			<CircleSpinner />
 		</template>
 		<template v-else-if="d_status === 'ERROR'">
-			<!-- <ErrorBox
-				:d_status="error.response.d_status"
-				:message="error.response.d_statusText"
-			/> -->
+			<ErrorBox
+				:error="d_error"
+			/>
 		</template>
 		<template v-else-if="d_status === 'LOADED'">
 			<div class="container">
