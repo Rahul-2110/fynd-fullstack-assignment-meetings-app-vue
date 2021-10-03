@@ -1,50 +1,64 @@
 <template>
-	<form class="form-signin">
-		<div class="title">
-			<span class="main-title text-uppercase text-center">Meetings</span>
-			<p class="subtitle text-center"><span class="by">By</span> Rahul</p>
-		</div>
+	<div>
+		<template v-if="d_status === 'LOADING'">
+			<CircleSpinner />
+		</template>
+		<template v-else-if="d_status === 'ERROR'">
+			<ErrorBox :error="d_error" />
+		</template>
+		<template v-else-if="d_status === 'LOADED'">
+			<form class="form-signin">
+				<div class="title">
+					<span class="main-title text-uppercase text-center"
+						>Meetings</span
+					>
+					<p class="subtitle text-center">
+						<span class="by">By</span> Rahul
+					</p>
+				</div>
 
-		<div class="form-group">
-			<input
-				name="email"
-				class="form-control"
-				placeholder="Email"
-				autofocus="autofocus"
-				type="text"
-				v-model="d_email"
-			/>
-		</div>
-		<div class="form-group">
-			<input
-				name="password"
-				class="form-control"
-				placeholder="Password"
-				type="password"
-				v-model="d_password"
-			/>
-		</div>
-		<div class="form-group subform">
-			<label class="checkbox-inline" for="UserRememberMe">
-				<input
-					type="checkbox"
-					name="rememberMe"
-					value="1"
-					id="UserRememberMe"
-					v-model="d_rememberMe"
-				/>Remember me
-			</label>
-			<a href="#" class="resetpassword">Reset Password</a>
-		</div>
-		<button @click.prevent="m_login" class="login-form-btn">Login</button>
-		<div class="form-group text-center">
-			<router-link to="/signup"
-				><p class="login-form-type">
-					Sign Up
-				</p></router-link
-			>
-		</div>
-	</form>
+				<div class="form-group">
+					<input
+						name="email"
+						class="form-control"
+						placeholder="Email"
+						autofocus="autofocus"
+						type="text"
+						v-model="d_email"
+					/>
+				</div>
+				<div class="form-group">
+					<input
+						name="password"
+						class="form-control"
+						placeholder="Password"
+						type="password"
+						v-model="d_password"
+					/>
+				</div>
+				<div class="form-group subform">
+					<label class="checkbox-inline" for="UserRememberMe">
+						<input
+							type="checkbox"
+							name="rememberMe"
+							value="1"
+							id="UserRememberMe"
+							v-model="d_rememberMe"
+						/>Remember me
+					</label>
+					<a href="#" class="resetpassword">Reset Password</a>
+				</div>
+				<button @click.prevent="m_login" class="login-form-btn">
+					Login
+				</button>
+				<div class="form-group text-center">
+					<router-link to="/signup"
+						><p class="login-form-type">Sign Up</p></router-link
+					>
+				</div>
+			</form>
+		</template>
+	</div>
 </template>
 
 <script>
@@ -57,6 +71,8 @@
 				d_email: null,
 				d_password: null,
 				d_rememberMe: false,
+				d_status: "LOADING",
+				d_error: null,
 				d_emailReg:
 					/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
 				// d_passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
@@ -65,23 +81,27 @@
 		methods: {
 			async m_validate() {
 				try {
-					await this.$store.dispatch( 'auth/login', {email: this.d_email, password: this.d_password, rememberMe: this.d_rememberMe});
-					await this.$store.dispatch( 'users/getRegisteredUsers');
+					await this.$store.dispatch("auth/login", {
+						email: this.d_email,
+						password: this.d_password,
+						rememberMe: this.d_rememberMe,
+					});
+					await this.$store.dispatch("users/getRegisteredUsers");
 					this.$router.push({ path: "/calendar" });
 				} catch (error) {
+					this.d_error = error;
+					this.d_status = "ERROR";
 					console.log("There was some error\n" + error.message);
 				}
 			},
 			m_login() {
+				this.d_status = "LOADING";
 				if (this.d_email != null && this.d_emailReg.test(this.d_email)) {
 					// if (
 					// 	this.d_password != null &&
 					// 	this.d_passwordReg.test(this.d_password)
-					// ) 
-					if (
-						this.d_password != null 
-					) 
-					{
+					// )
+					if (this.d_password != null) {
 						this.m_validate();
 					} else {
 						console.log("Check password");
@@ -223,10 +243,10 @@
 		text-decoration: underline;
 	}
 
-	a{
-        text-decoration: none;
-    }
-    
+	a {
+		text-decoration: none;
+	}
+
 	.login-form-type:hover {
 		color: #4a8ad9;
 	}
@@ -238,6 +258,4 @@
 	.text-center {
 		text-align: center;
 	}
-
-	
 </style>

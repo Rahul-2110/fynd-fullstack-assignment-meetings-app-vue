@@ -7,7 +7,6 @@ const path = require('path');
 app = express();
 
 app.use(history({
-    // OPTIONAL: Includes more verbose logging
     verbose: true
 }))
 app.use(serveStatic(path.join(__dirname, 'dist')));

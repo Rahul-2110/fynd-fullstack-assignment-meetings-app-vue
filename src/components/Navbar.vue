@@ -20,15 +20,21 @@
 					to="/calendar"
 					active-class="active"
 					exact
+					@click="d_isCrossClicked = false"
 					>Calender</router-link
 				>
 				<router-link
 					class="nav-link"
 					to="/meetings"
 					active-class="active"
+					@click="d_isCrossClicked = false"
 					>Meetings</router-link
 				>
-				<router-link class="nav-link" to="/teams" active-class="active"
+				<router-link
+					class="nav-link"
+					to="/teams"
+					active-class="active"
+					@click="d_isCrossClicked = false"
 					>Teams</router-link
 				>
 				<!-- <a href="#" class="active">Calendar</a>
