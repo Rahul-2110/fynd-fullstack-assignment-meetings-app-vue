@@ -26,7 +26,6 @@ export default {
 
 body {
   font-family: "Source Sans Pro", sans-serif;
-  margin: 0 0 100px 0;
 }
 
 
