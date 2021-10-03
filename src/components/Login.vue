@@ -111,7 +111,11 @@
 				}
 			},
 		},
+		created(){
+			this.d_status = "LOADED";
+		}
 	};
+
 </script>
 
 <style scoped>
