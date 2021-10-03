@@ -80,6 +80,7 @@
 					);
 					this.$router.push({ path: "/login" });
 				} catch (error) {
+					// TODO: Error Handling and display alert
 					console.log("There was some error\n" + error.message);
 				}
 			},
@@ -97,30 +98,37 @@
 								if (this.d_password === this.d_confirmPassword) {
 									this.m_regiterUser();
 								} else {
+									// TODO: Error Handling and display alert
 									throw {
 										message: "Password doesn't match",
-										value: '',
+										value: "",
 									};
 								}
 							} else {
+								// TODO: Error Handling and display alert
 								throw {
 									message: "Invalid Password",
-									value: '',
+									value: "",
 								};
 							}
 						} else {
+							// TODO: Error Handling and display alert
 							throw {
 								message: "Invalid Email",
 								value: this.d_email,
 							};
 						}
 					} else {
+						// TODO: Error Handling and display alert
+
 						throw {
 							message: "Invalid Name",
 							value: this.d_name,
 						};
 					}
 				} catch (err) {
+					// TODO: Error Handling and display alert
+
 					console.log(err);
 				}
 			},

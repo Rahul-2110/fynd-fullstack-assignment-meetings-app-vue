@@ -1,12 +1,10 @@
 <template>
-	<div v-bind:class="{'hide-overflow': d_addTeam }">
+	<div v-bind:class="{ 'hide-overflow': d_addTeam }">
 		<template v-if="d_status === 'LOADING'">
 			<CircleSpinner />
 		</template>
 		<template v-else-if="d_status === 'ERROR'">
-			<ErrorBox
-				:error="d_error"
-			/>
+			<ErrorBox :error="d_error" />
 		</template>
 		<template v-else-if="d_status === 'LOADED'">
 			<div class="container">
@@ -69,9 +67,9 @@
 					this.d_myTeams = response;
 					this.d_status = "LOADED";
 				} catch (err) {
+					// TODO: Error Handling and display alert
 					this.d_error = err;
 					this.d_status = "ERROR";
-					
 				}
 			},
 			async m_addMemberToTeam(teamId, userId) {
@@ -80,11 +78,11 @@
 					const response = await s_teams_addMemberToTeam(teamId, userId);
 					// console.log(response);
 					this.m_getMyTeams();
-					this.d_status ="LOADED";
+					this.d_status = "LOADED";
 				} catch (err) {
+					// TODO: Error Handling and display alert
 					this.d_error = err;
 					this.d_status = "ERROR";
-					
 				}
 			},
 			async m_excuseYourselfFromTeam(teamId) {
@@ -95,12 +93,12 @@
 					);
 					// console.log(response);
 					this.m_getMyTeams();
-					this.d_status ="LOADED";
+					this.d_status = "LOADED";
 				} catch (err) {
+					// TODO: Error Handling and display alert
 					console.log(err);
 					this.d_error = err;
 					this.d_status = "ERROR";
-					
 				}
 			},
 			async m_addTeam(name, shortName, description, members) {
@@ -115,12 +113,12 @@
 					);
 					// console.log(response);
 					this.m_getMyTeams();
-					this.d_status ="LOADED";
+					this.d_status = "LOADED";
 				} catch (err) {
+					// TODO: Error Handling and display alert
 					this.d_error = err;
 					this.d_status = "ERROR";
 					console.log(err);
-					
 				}
 			},
 		},
@@ -185,7 +183,7 @@
 		}
 	}
 
-	.hide-overflow{
+	.hide-overflow {
 		overflow: hidden;
 	}
 </style>

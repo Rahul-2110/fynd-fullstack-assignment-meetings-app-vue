@@ -92,6 +92,8 @@
 					this.d_showSearchedMeetings = true;
 					this.d_searchedMeetingsList = response;
 				} catch (err) {
+					
+					// TODO: Error Handling and display alert
 					this.d_status = "ERROR";
 					this.d_error = err;
 				}
@@ -101,6 +103,8 @@
 					await s_meetings_excuseYourselfFromAMeeting(meetingId);
 					this.m_getSearchedMeetings();
 				} catch (err) {
+					
+					// TODO: Error Handling and display alert
 					console.log(err);
 					this.d_status = "ERROR";
 					this.d_error = err;
@@ -111,6 +115,8 @@
 					await s_meetings_addAttendeeToMeeting(meetingId, userId);
 					this.m_getSearchedMeetings();
 				} catch (err) {
+					
+					// TODO: Error Handling and display alert
 					console.log(err);
 					this.d_status = "ERROR";
 					this.d_error = err;

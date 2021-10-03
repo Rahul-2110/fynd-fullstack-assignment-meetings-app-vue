@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+	import { mapState } from "vuex";
 	import { s_teams_getMyTeams } from "@/services/teamsServices.js";
 	import { s_meetings_addMeeting } from "@/services/meetingsServices.js";
 	export default {
@@ -134,17 +134,15 @@ import { mapState } from "vuex";
 				d_meetingDescription: "",
 				d_meetingAttendees: "",
 				d_myTeams: [],
-				d_error:""
+				d_error: "",
 			};
 		},
-		computed:{
+		computed: {
 			...mapState({
-				s_registeredUsers: (state) => state.users.registeredUsers
+				s_registeredUsers: (state) => state.users.registeredUsers,
 			}),
 		},
-		props:{
-		
-		},
+		props: {},
 		methods: {
 			async m_getMyTeams() {
 				try {
@@ -191,7 +189,7 @@ import { mapState } from "vuex";
 											);
 
 											if (teamToAdd === undefined) {
-												
+												// TODO: Error Handling and display alert
 												throw {
 													message:
 														"Wrong Team Short Name",
@@ -202,7 +200,7 @@ import { mapState } from "vuex";
 													(user) => {
 														usersToAddObjectList.push({
 															email: user.email,
-															value: user.userId
+															value: user.userId,
 														});
 													}
 												);
@@ -229,15 +227,17 @@ import { mapState } from "vuex";
 													console.log(
 														typeof trimmedParticipantName
 													);
+
+													// TODO: Error Handling and display alert
 													throw {
 														message: "Wrong EmailId",
-														email: trimmedParticipantName
+														email: trimmedParticipantName,
 													};
 												}
 											} else {
 												usersToAddObjectList.push({
 													email: userToAdd.email,
-													userId: userToAdd._id.toString()
+													userId: userToAdd._id.toString(),
 												});
 											}
 										}
@@ -263,18 +263,21 @@ import { mapState } from "vuex";
 										usersToAddObjectList
 									);
 								} else {
+									// TODO: Error Handling and display alert
 									throw {
 										message: "Invalid Description",
 										value: this.d_meetingDescription,
 									};
 								}
 							} else {
+								// TODO: Error Handling and display alert
 								throw {
 									message: "Invalid End Time",
 									value: "",
 								};
 							}
 						} else {
+							// TODO: Error Handling and display alert
 							throw {
 								message: "Invalid Meeting Start Time and Date",
 								value: new Date(this.d_meetingDate).setHours(
@@ -284,12 +287,14 @@ import { mapState } from "vuex";
 							};
 						}
 					} else {
+						// TODO: Error Handling and display alert
 						throw {
 							message: "Invalid Meeting Name",
 							value: this.d_meetingName,
 						};
 					}
 				} catch (err) {
+					// TODO: Error Handling and display alert
 					console.log(err);
 				}
 			},
@@ -297,7 +302,7 @@ import { mapState } from "vuex";
 		async created() {
 			await this.m_getMyTeams();
 			this.d_status = "LOADED";
-		}
+		},
 	};
 </script>
 

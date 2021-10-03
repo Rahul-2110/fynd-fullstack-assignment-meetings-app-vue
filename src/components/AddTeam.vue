@@ -81,19 +81,14 @@
 				<button class="create-team-btn">Create</button>
 			</div>
 		</div>
-		<div @click="
-					$emit(
-						'e_Teams_closeAddTeam'
-					)
-				"
-				class="close-form-icon">
+		<div @click="$emit('e_Teams_closeAddTeam')" class="close-form-icon">
 			<p class="add-team-close-form">+</p>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+	import { mapState } from "vuex";
 	export default {
 		name: "AddTeam",
 		props: {
@@ -117,9 +112,9 @@ import { mapState } from "vuex";
 				d_error: "",
 			};
 		},
-		computed:{
+		computed: {
 			...mapState({
-				s_registeredUsers: (state) => state.users.registeredUsers
+				s_registeredUsers: (state) => state.users.registeredUsers,
 			}),
 		},
 		methods: {
@@ -157,24 +152,28 @@ import { mapState } from "vuex";
 									this.d_selectedUsers
 								);
 							} else {
+								// TODO: Error Handling and display alert
 								throw {
 									message: "Invalid Meeting Description",
 									value: this.d_description,
 								};
 							}
 						} else {
+							// TODO: Error Handling and display alert
 							throw {
 								message: "Invalid Meeting ShortName",
 								value: this.d_shortName,
 							};
 						}
 					} else {
+						// TODO: Error Handling and display alert
 						throw {
 							message: "Invalid Meeting Name",
 							value: this.d_name,
 						};
 					}
 				} catch (err) {
+					// TODO: Error Handling and display alert
 					console.log(err);
 				}
 			},

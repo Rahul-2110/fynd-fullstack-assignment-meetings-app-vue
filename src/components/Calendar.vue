@@ -136,6 +136,9 @@
 					this.d_status = "LOADED";
 					// console.log(this.meetings);
 				} catch (err) {
+					
+					// TODO: Error Handling and display alert
+					
 					this.d_error = err;
 					this.d_status = "ERROR";
 				}

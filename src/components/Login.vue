@@ -88,7 +88,12 @@
 					});
 					await this.$store.dispatch("users/getRegisteredUsers");
 					this.$router.push({ path: "/calendar" });
+
+					
 				} catch (error) {
+
+					// TODO: Error Handling and display alert
+
 					this.d_error = error;
 					this.d_status = "ERROR";
 					console.log("There was some error\n" + error.message);
