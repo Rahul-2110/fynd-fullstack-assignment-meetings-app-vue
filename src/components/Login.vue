@@ -3,10 +3,15 @@
 		<template v-if="d_status === 'LOADING'">
 			<CircleSpinner />
 		</template>
-		<template v-else-if="d_status === 'ERROR'">
-			<ErrorBox :error="d_error" />
-		</template>
-		<template v-else-if="d_status === 'LOADED'">
+
+		<template v-else>
+			<template v-if="d_status === 'ERROR'">
+				<app-alert
+					:type="d_error.type"
+					:message="d_error.message"
+					v-on:e_Alert_clearAlert="m_removeAlert"
+				></app-alert>
+			</template>
 			<form class="form-signin">
 				<div class="title">
 					<span class="main-title text-uppercase text-center"
@@ -86,15 +91,13 @@
 						password: this.d_password,
 						rememberMe: this.d_rememberMe,
 					});
-					await this.$store.dispatch("users/getRegisteredUsers");
+
 					this.$router.push({ path: "/calendar" });
-
-					
 				} catch (error) {
-
 					// TODO: Error Handling and display alert
 
 					this.d_error = error;
+					this.d_error.type = "danger";
 					this.d_status = "ERROR";
 					console.log("There was some error\n" + error.message);
 				}
@@ -109,18 +112,37 @@
 					if (this.d_password != null) {
 						this.m_validate();
 					} else {
+						// TODO: Error Handling and display alert
+						this.d_error = {
+							type: "danger",
+							message: "Invalid Password",
+							value: this.d_password,
+						};
+
+						this.d_status = "ERROR";
 						console.log("Check password");
 					}
 				} else {
+					// TODO: Error Handling and display alert
+
+					this.d_error = {
+						type: "danger",
+						message: "Invalid Name",
+						value: "",
+					};
+					this.d_status = "ERROR";
 					console.log("Check email address");
 				}
 			},
+			m_removeAlert(){
+				this.d_status="LOADED";
+				this.error = null;
+			},
 		},
-		created(){
+		created() {
 			this.d_status = "LOADED";
-		}
+		},
 	};
-
 </script>
 
 <style scoped>
