@@ -277,6 +277,13 @@
 										endTime,
 										usersToAddObjectList
 									);
+
+									this.d_alert = {
+										type: "success",
+										message: "Meeting created successfully",
+									};
+
+									this.d_alert_status = true;
 								} else {
 									this.d_alert = {
 										type: "warning",
