@@ -1,63 +1,90 @@
 <template>
-	<form class="form-signin">
-		<div class="title">
-			<span class="main-title text-uppercase text-center">Meetings</span>
-			<p class="subtitle text-center"><span class="by">By</span> Rahul</p>
-		</div>
-		<div class="form-group">
-			<input
-				name="name"
-				class="form-control"
-				placeholder="Name"
-				autofocus="autofocus"
-				type="text"
-				v-model="d_name"
-			/>
-		</div>
-		<div class="form-group">
-			<input
-				name="email"
-				class="form-control"
-				placeholder="Email"
-				autofocus="autofocus"
-				type="text"
-				v-model="d_email"
-			/>
-		</div>
-		<div class="form-group">
-			<input
-				name="password"
-				class="form-control"
-				placeholder="Password"
-				type="password"
-				v-model="d_password"
-			/>
-		</div>
-		<div class="form-group">
-			<input
-				name="password"
-				class="form-control"
-				placeholder="Confirm Password"
-				type="password"
-				v-model="d_confirmPassword"
-			/>
-		</div>
-		<button @click.prevent="m_validateAndRegister" class="login-form-btn">
-			Register
-		</button>
-		<div class="form-group text-center">
-			<router-link to="/login"
-				><p class="login-form-type">Login</p></router-link
-			>
-		</div>
-	</form>
+	<div>
+		<template v-if="d_status === 'LOADING'">
+			<CircleSpinner />
+		</template>
+		<template v-else-if="d_status === 'ERROR'">
+			<!-- <ErrorBox
+				:d_status="error.response.d_status"
+				:message="error.response.d_statusText"
+			/> -->
+		</template>
+		<template v-else>
+			<template v-if="d_alert_status === true">
+				<app-alert
+					:type="d_alert.type"
+					:message="d_alert.message"
+					v-on:e_Alert_clearAlert="m_removeAlert"
+				></app-alert>
+			</template>
+			<form class="form-signin">
+				<div class="title">
+					<span class="main-title text-uppercase text-center"
+						>Meetings</span
+					>
+					<p class="subtitle text-center">
+						<span class="by">By</span> Rahul
+					</p>
+				</div>
+				<div class="form-group">
+					<input
+						name="name"
+						class="form-control"
+						placeholder="Name"
+						autofocus="autofocus"
+						type="text"
+						v-model="d_name"
+					/>
+				</div>
+				<div class="form-group">
+					<input
+						name="email"
+						class="form-control"
+						placeholder="Email"
+						autofocus="autofocus"
+						type="text"
+						v-model="d_email"
+					/>
+				</div>
+				<div class="form-group">
+					<input
+						name="password"
+						class="form-control"
+						placeholder="Password"
+						type="password"
+						v-model="d_password"
+					/>
+				</div>
+				<div class="form-group">
+					<input
+						name="password"
+						class="form-control"
+						placeholder="Confirm Password"
+						type="password"
+						v-model="d_confirmPassword"
+					/>
+				</div>
+				<button
+					@click.prevent="m_validateAndRegister"
+					class="login-form-btn"
+				>
+					Register
+				</button>
+				<div class="form-group text-center">
+					<router-link to="/login"
+						><p class="login-form-type">Login</p></router-link
+					>
+				</div>
+			</form>
+		</template>
+	</div>
 </template>
 
 <script>
 	import { s_users_meetingsRegister } from "@/services/userManagementServices.js";
 	import router from "@/router/routes.js";
 	export default {
-		name: "Login",
+		name: "signup",
 		router,
 		data() {
 			return {
@@ -68,6 +95,10 @@
 				d_passwordReg: /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])/,
 				d_confirmPassword: "",
 				d_name: "",
+				d_status: "LOADING",
+				d_alert_status: false,
+				d_alert: null,
+				d_error: null,
 			};
 		},
 		methods: {
@@ -78,9 +109,22 @@
 						this.d_email,
 						this.d_password
 					);
-					this.$router.push({ path: "/login" });
+					this.d_alert = {
+						type: "success",
+						message: "Account created",
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 				} catch (error) {
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					console.log("There was some error\n" + error.message);
 				}
 			},
@@ -98,40 +142,60 @@
 								if (this.d_password === this.d_confirmPassword) {
 									this.m_regiterUser();
 								} else {
-									// TODO: Error Handling and display alert
-									throw {
-										message: "Password doesn't match",
-										value: "",
+									this.d_alert = {
+										type: "warning",
+										message: "Passwords don't match",
+										value: this.d_password,
 									};
+
+									this.d_alert_status = true;
 								}
 							} else {
-								// TODO: Error Handling and display alert
-								throw {
-									message: "Invalid Password",
-									value: "",
+								this.d_alert = {
+									type: "warning",
+									message: "Password should containg a Capital letter, number and a symbol",
+									value: this.d_password,
 								};
+
+								this.d_alert_status = true;
 							}
 						} else {
-							// TODO: Error Handling and display alert
-							throw {
-								message: "Invalid Email",
-								value: this.d_email,
+							this.d_alert = {
+								type: "warning",
+								message: "Invalid EmailID",
+								value: this.d_password,
 							};
+
+							this.d_alert_status = true;
 						}
 					} else {
-						// TODO: Error Handling and display alert
-
-						throw {
+						this.d_alert = {
+							type: "warning",
 							message: "Invalid Name",
-							value: this.d_name,
+							value: this.d_password,
 						};
+
+						this.d_alert_status = true;
 					}
 				} catch (err) {
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
 
 					console.log(err);
 				}
 			},
+			m_removeAlert() {
+				this.d_alert_status = false;
+				this.d_alert = null;
+			},
+		},
+		created() {
+			this.d_status = "LOADED";
 		},
 	};
 </script>

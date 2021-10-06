@@ -21,6 +21,10 @@
 </script>
 
 <style>
+	/* .router-view{
+		min-height: 80vh;
+	} */
+
 	.container {
 		margin: 120px 2em 50px 2em;
 	}

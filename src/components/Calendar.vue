@@ -8,7 +8,14 @@
 				:error="d_error"
 			/>
 		</template>
-		<template v-else-if="d_status === 'LOADED'">
+		<template v-else>
+			<template v-if="d_alert_status === true">
+				<app-alert
+					:type="d_alert.type"
+					:message="d_alert.message"
+					v-on:e_Alert_clearAlert="m_removeAlert"
+				></app-alert>
+			</template>
 			<div class="container">
 				<h1>Calendar</h1>
 				<hr />
@@ -83,6 +90,8 @@
 				d_error: null,
 				d_meetings: [],
 				d_selectedDate: new Date().toISOString().substr(0, 10),
+				d_alert_status: false,
+				d_alert: null,
 			};
 		},
 		computed: {
@@ -136,13 +145,23 @@
 					this.d_status = "LOADED";
 					// console.log(this.meetings);
 				} catch (err) {
-					
-					// TODO: Error Handling and display alert
-					
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					this.d_error = err;
-					this.d_status = "ERROR";
+
+					//this.d_status = "ERROR";
 				}
 				
+			},
+			m_removeAlert() {
+				this.d_alert_status = false;
+				this.d_alert = null;
 			},
 		},
 		async created() {

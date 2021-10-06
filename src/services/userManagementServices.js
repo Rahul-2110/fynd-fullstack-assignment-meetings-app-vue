@@ -4,7 +4,7 @@ import AppConfig from "@/config";
 const { apiBaseUrl } = AppConfig;
 
 const s_users_meetingslogin = async (email, password) => {
-	const response = await axios.post(`${apiBaseUrl}/auth/logi`, 
+	const response = await axios.post(`${apiBaseUrl}/auth/login`, 
     {
 		email: email,
 		password: password,

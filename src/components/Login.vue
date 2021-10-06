@@ -3,12 +3,17 @@
 		<template v-if="d_status === 'LOADING'">
 			<CircleSpinner />
 		</template>
-
+		<template v-else-if="d_status === 'ERROR'">
+			<!-- <ErrorBox
+				:d_status="error.response.d_status"
+				:message="error.response.d_statusText"
+			/> -->
+		</template>
 		<template v-else>
-			<template v-if="d_status === 'ERROR'">
+			<template v-if="d_alert_status === true">
 				<app-alert
-					:type="d_error.type"
-					:message="d_error.message"
+					:type="d_alert.type"
+					:message="d_alert.message"
 					v-on:e_Alert_clearAlert="m_removeAlert"
 				></app-alert>
 			</template>
@@ -77,6 +82,8 @@
 				d_password: null,
 				d_rememberMe: false,
 				d_status: "LOADING",
+				d_alert_status: false,
+				d_alert: null,
 				d_error: null,
 				d_emailReg:
 					/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
@@ -94,11 +101,15 @@
 
 					this.$router.push({ path: "/calendar" });
 				} catch (error) {
-					// TODO: Error Handling and display alert
 
-					this.d_error = error;
-					this.d_error.type = "danger";
-					this.d_status = "ERROR";
+					this.d_alert = {
+						type: "danger",
+						message: "Invalid credentials",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					console.log("There was some error\n" + error.message);
 				}
 			},
@@ -112,31 +123,30 @@
 					if (this.d_password != null) {
 						this.m_validate();
 					} else {
-						// TODO: Error Handling and display alert
-						this.d_error = {
+						this.d_alert = {
 							type: "danger",
 							message: "Invalid Password",
 							value: this.d_password,
 						};
 
-						this.d_status = "ERROR";
+						this.d_alert_status = true;
 						console.log("Check password");
 					}
 				} else {
-					// TODO: Error Handling and display alert
 
-					this.d_error = {
+					this.d_alert = {
 						type: "danger",
 						message: "Invalid Name",
 						value: "",
 					};
-					this.d_status = "ERROR";
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					console.log("Check email address");
 				}
 			},
-			m_removeAlert(){
-				this.d_status="LOADED";
-				this.error = null;
+			m_removeAlert() {
+				this.d_alert_status = false;
+				this.d_alert = null;
 			},
 		},
 		created() {

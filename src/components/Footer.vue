@@ -12,7 +12,9 @@ export default {
 </script>
 
 <style scoped>
-.footer{  
+.footer{
+    position: fixed;
+    bottom: 0; 
     display: flex;
     background-color: #eeeeee;
     width: 100vw;

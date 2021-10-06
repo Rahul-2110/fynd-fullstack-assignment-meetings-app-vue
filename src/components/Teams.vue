@@ -1,12 +1,19 @@
 <template>
-	<div v-bind:class="{ 'hide-overflow': d_addTeam }">
+	<div>
 		<template v-if="d_status === 'LOADING'">
 			<CircleSpinner />
 		</template>
 		<template v-else-if="d_status === 'ERROR'">
 			<ErrorBox :error="d_error" />
 		</template>
-		<template v-else-if="d_status === 'LOADED'">
+		<template v-else>
+			<template v-if="d_alert_status === true">
+				<app-alert
+					:type="d_alert.type"
+					:message="d_alert.message"
+					v-on:e_Alert_clearAlert="m_removeAlert"
+				></app-alert>
+			</template>
 			<div class="container">
 				<h1>Teams</h1>
 				<hr />
@@ -57,6 +64,8 @@
 				d_myTeams: [],
 				d_error: "",
 				d_addTeam: false,
+				d_alert_status: false,
+				d_alert: null,
 			};
 		},
 		methods: {
@@ -65,24 +74,42 @@
 					const response = await s_teams_getMyTeams();
 					// console.log(response);
 					this.d_myTeams = response;
-					this.d_status = "LOADED";
 				} catch (err) {
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong"
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					this.d_error = err;
-					this.d_status = "ERROR";
+					//this.d_status = "ERROR";
 				}
 			},
 			async m_addMemberToTeam(teamId, userId) {
 				try {
 					this.d_status = "LOADING";
 					const response = await s_teams_addMemberToTeam(teamId, userId);
+					
 					// console.log(response);
 					this.m_getMyTeams();
+					this.d_alert = {
+						type: "success",
+						message: "User added to the team."
+					};
+
+					this.d_alert_status = true;
 					this.d_status = "LOADED";
 				} catch (err) {
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong"
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					this.d_error = err;
-					this.d_status = "ERROR";
+					//this.d_status = "ERROR";
 				}
 			},
 			async m_excuseYourselfFromTeam(teamId) {
@@ -91,39 +118,70 @@
 					const response = await s_teams_excuseYourselfFromMeeting(
 						teamId
 					);
-					// console.log(response);
 					this.m_getMyTeams();
+					this.d_alert = {
+						type: "success",
+						message: "Excused yourself from the team."
+					};
+
+					this.d_alert_status = true;
+					// console.log(response);
+					
 					this.d_status = "LOADED";
 				} catch (err) {
-					// TODO: Error Handling and display alert
-					console.log(err);
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong"
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
+					
 					this.d_error = err;
-					this.d_status = "ERROR";
+					//this.d_status = "ERROR";
 				}
 			},
 			async m_addTeam(name, shortName, description, members) {
 				try {
 					this.d_addTeam = false;
 					this.d_status = "LOADING";
+					this.m_getMyTeams();
 					const response = await s_teams_addTeam(
 						name,
 						shortName,
 						description,
 						members
 					);
+					this.d_alert = {
+						type: "success",
+						message: "Team created"
+					};
+
+					this.d_alert_status = true;
 					// console.log(response);
-					this.m_getMyTeams();
+					
 					this.d_status = "LOADED";
 				} catch (err) {
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong"
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					this.d_error = err;
-					this.d_status = "ERROR";
-					console.log(err);
+					// this.d_status = "ERROR";
+					
 				}
+			},
+			m_removeAlert() {
+				this.d_alert_status = false;
+				this.d_alert = null;
 			},
 		},
 		async created() {
 			await this.m_getMyTeams();
+			this.d_status = "LOADED"
 		},
 	};
 </script>
@@ -181,9 +239,5 @@
 			flex-basis: 30%;
 			min-width: 300px;
 		}
-	}
-
-	.hide-overflow {
-		overflow: hidden;
 	}
 </style>

@@ -111,7 +111,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	const isLoggedIn = store.getters["auth/isAuthenticated"];
-	if (to.name !== "login" && !isLoggedIn) {
+	if (to.name !== "login" && to.name !== "signup" && !isLoggedIn) {
 		next({ name: "login" });
 	}
 	else if(to.path === "/" && isLoggedIn){

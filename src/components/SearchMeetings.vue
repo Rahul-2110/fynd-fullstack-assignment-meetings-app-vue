@@ -1,61 +1,72 @@
 <template>
 	<div>
-		<template v-if="d_status === 'LOADING'">
-			<CircleSpinner />
-		</template>
-		<template v-else-if="d_status === 'ERROR'">
+		<template v-if="d_status === 'ERROR'">
 			<!-- <ErrorBox
 				:d_status="error.response.d_status"
 				:message="error.response.d_statusText"
 			/> -->
 		</template>
-		<template v-else-if="d_status === 'LOADED'">
-		<div class="tab-content">
-			<h3>Search for meetings</h3>
-			<hr />
-			<div class="search-meeting-form">
-				<div class="search-meeting-form-group">
-					<label for="date" class="search-meeting-form-group-label"
-						>Date</label
+		<template v-else>
+			<template v-if="d_alert_status === true">
+				<app-alert
+					:type="d_alert.type"
+					:message="d_alert.message"
+					v-on:e_Alert_clearAlert="m_removeAlert"
+				></app-alert>
+			</template>
+			<div class="tab-content">
+				<h3>Search for meetings</h3>
+				<hr />
+				<div class="search-meeting-form">
+					<div class="search-meeting-form-group">
+						<label
+							for="date"
+							class="search-meeting-form-group-label"
+							>Date</label
+						>
+						<select name="date" v-model="d_selectedPeriod">
+							<option value="all">ALL</option>
+							<option value="past">PAST</option>
+							<option value="present">TODAY</option>
+							<option value="future">UPCOMING</option>
+						</select>
+					</div>
+					<div class="search-meeting-form-group">
+						<label
+							for="search-for"
+							class="search-meeting-form-group-label"
+							>Search for</label
+						>
+						<textarea
+							name="search-for"
+							rows="1"
+							cols="40"
+							minlength="10"
+							placeholder="Search using words which describe a meeting"
+							required
+							v-model="d_selectedDescription"
+						></textarea>
+					</div>
+					<button
+						@click="m_getSearchedMeetings"
+						class="search-meeting-btn"
 					>
-					<select name="date" v-model="d_selectedPeriod">
-						<option value="all">ALL</option>
-						<option value="past">PAST</option>
-						<option value="present">TODAY</option>
-						<option value="future">UPCOMING</option>
-					</select>
+						Search
+					</button>
 				</div>
-				<div class="search-meeting-form-group">
-					<label
-						for="search-for"
-						class="search-meeting-form-group-label"
-						>Search for</label
-					>
-					<textarea
-						name="search-for"
-						rows="1"
-						cols="40"
-						minlength="10"
-						placeholder="Search using words which describe a meeting"
-						required
-						v-model="d_selectedDescription"
-					></textarea>
-				</div>
-				<button
-					@click="m_getSearchedMeetings"
-					class="search-meeting-btn"
-				>
-					Search
-				</button>
 			</div>
-		</div>
-		<template v-if="d_showSearchedMeetings">
-			<search-meetings-result
-				:p_meetingsList="d_searchedMeetingsList"
-				v-on:e_SearchMeetings_excuseYourself="m_excuseYourselfFromMeeting"
-                v-on:e_SearchMeetings_addAttendee="m_addAttendeeToMeeting"
-			></search-meetings-result>
-		</template>
+			<template v-if="d_showSearchedMeetings">
+				<template v-if="d_status === 'LOADING'">
+					<CircleSpinner />
+				</template>
+				<search-meetings-result
+					:p_meetingsList="d_searchedMeetingsList"
+					v-on:e_SearchMeetings_excuseYourself="
+						m_excuseYourselfFromMeeting
+					"
+					v-on:e_SearchMeetings_addAttendee="m_addAttendeeToMeeting"
+				></search-meetings-result>
+			</template>
 		</template>
 	</div>
 </template>
@@ -65,7 +76,7 @@
 	import {
 		s_meetings_getMeetingsMatchingCriteria,
 		s_meetings_excuseYourselfFromAMeeting,
-        s_meetings_addAttendeeToMeeting
+		s_meetings_addAttendeeToMeeting,
 	} from "@/services/meetingsServices.js";
 	export default {
 		name: "SearchMeetings",
@@ -77,13 +88,15 @@
 				d_searchedMeetingsList: [],
 				d_showSearchedMeetings: false,
 				d_status: "LOADING",
-				d_error:""
+				d_error: "",
+				d_alert_status: false,
+				d_alert: null,
 			};
 		},
-		props:{
-		},
+		props: {},
 		methods: {
 			async m_getSearchedMeetings() {
+				this.d_status = "LOADING";
 				try {
 					const response = await s_meetings_getMeetingsMatchingCriteria(
 						this.d_selectedPeriod,
@@ -91,11 +104,19 @@
 					);
 					this.d_showSearchedMeetings = true;
 					this.d_searchedMeetingsList = response;
+					this.d_status = "LOADED";
 				} catch (err) {
-					
-					// TODO: Error Handling and display alert
-					this.d_status = "ERROR";
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
+					//this.d_status = "ERROR";
 					this.d_error = err;
+					console.log(this.d_error);
 				}
 			},
 			async m_excuseYourselfFromMeeting(meetingId) {
@@ -103,29 +124,45 @@
 					await s_meetings_excuseYourselfFromAMeeting(meetingId);
 					this.m_getSearchedMeetings();
 				} catch (err) {
-					
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					console.log(err);
-					this.d_status = "ERROR";
+					// this.d_status = "ERROR";
 					this.d_error = err;
 				}
 			},
-            async m_addAttendeeToMeeting(meetingId, userId){
-                try {
+			async m_addAttendeeToMeeting(meetingId, userId) {
+				try {
 					await s_meetings_addAttendeeToMeeting(meetingId, userId);
 					this.m_getSearchedMeetings();
 				} catch (err) {
-					
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+						value: this.d_password,
+					};
+
+					this.d_alert_status = true;
+					this.d_status = "LOADED";
 					console.log(err);
-					this.d_status = "ERROR";
+					//this.d_status = "ERROR";
 					this.d_error = err;
 				}
-            }
+			},
+			m_removeAlert() {
+				this.d_alert_status = false;
+				this.d_alert = null;
+			},
 		},
-		created(){
-			this.d_status="LOADED";
-		}
+		created() {
+			this.d_status = "LOADED";
+		},
 	};
 </script>
 

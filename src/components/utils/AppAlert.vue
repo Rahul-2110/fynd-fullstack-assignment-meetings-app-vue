@@ -32,18 +32,19 @@
 
 <style scoped>
 	.alert {
+		z-index: 3;
         display: flex;
         flex-direction: row;
-        position: absolute;
+        position: fixed;
         transform: translate(-50%, -50%);
         justify-content: space-between;
         align-items: center;
-        top: 20%;
-        left: 50%;
+        top: 20vh;
+        left: 50vw;
 		padding: 10px 30px;
 		border-radius: 5px;
 		font-size: 1.4rem;
-        width: 400px;
+        min-width: 400px;
 	}
 
 	.alert .alert__button {

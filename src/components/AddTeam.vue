@@ -1,88 +1,101 @@
 <template>
-	<div class="add-team-form-container display-hidden">
-		<h3>Create Team</h3>
-		<div class="add-team-form">
-			<div class="add-team-form-group">
-				<label for="team-name" class="add-team-form-group-label"
-					>Name</label
-				>
-				<input
-					name="team-name"
-					type="text"
-					placeholder="Name for team"
-					v-model="d_name"
-				/>
-			</div>
-			<div class="add-team-form-group">
-				<label for="team-short-name" class="add-team-form-group-label"
-					>Short Name</label
-				>
-				<input
-					name="team-short-name"
-					type="text"
-					placeholder="Short name for team"
-					v-model="d_shortName"
-				/>
-			</div>
-			<div class="add-team-form-group">
-				<label for="team-desctiption" class="add-team-form-group-label"
-					>Description</label
-				>
-				<textarea
-					name="team-desctiption"
-					rows="1"
-					cols="40"
-					minlength="10"
-					placeholder="Short description for team"
-					v-model="d_description"
-				></textarea>
-			</div>
-			<div class="add-team-form-group">
-				<p class="team-members">
-					<span class="team-members-head">Add Members</span>:
-				</p>
-				<div class="add-member-to-team selectdiv">
-					<label>
-						<select v-model="d_selectedUserId">
-							<option disabled hidden selected value="">
-								Select a member
-							</option>
-							<option
-								v-for="user in s_registeredUsers"
-								:key="user._id"
-								:value="user._id"
-							>
-								{{ user.email }}
-							</option>
-						</select>
-					</label>
-					<button
-						@click="m_addMemberToTeam"
-						class="add-member-to-team-btn"
+	<div>
+		<template v-if="d_alert_status === true">
+			<app-alert
+				:type="d_alert.type"
+				:message="d_alert.message"
+				v-on:e_Alert_clearAlert="m_removeAlert"
+			></app-alert>
+		</template>
+		<div class="add-team-form-container display-hidden">
+			<h3>Create Team</h3>
+			<div class="add-team-form">
+				<div class="add-team-form-group">
+					<label for="team-name" class="add-team-form-group-label"
+						>Name</label
 					>
-						Add
-					</button>
-
-					<p class="selected-users">
-						<span>Selected Users:</span>
-						<span
-							v-for="selectedUser in d_selectedUsers"
-							:key="selectedUser._id"
-							>{{ selectedUser.email }}</span
-						>
+					<input
+						name="team-name"
+						type="text"
+						placeholder="Name for team"
+						v-model="d_name"
+					/>
+				</div>
+				<div class="add-team-form-group">
+					<label
+						for="team-short-name"
+						class="add-team-form-group-label"
+						>Short Name</label
+					>
+					<input
+						name="team-short-name"
+						type="text"
+						placeholder="Short name for team"
+						v-model="d_shortName"
+					/>
+				</div>
+				<div class="add-team-form-group">
+					<label
+						for="team-desctiption"
+						class="add-team-form-group-label"
+						>Description</label
+					>
+					<textarea
+						name="team-desctiption"
+						rows="1"
+						cols="40"
+						minlength="10"
+						placeholder="Short description for team"
+						v-model="d_description"
+					></textarea>
+				</div>
+				<div class="add-team-form-group">
+					<p class="team-members">
+						<span class="team-members-head">Add Members</span>:
 					</p>
+					<div class="add-member-to-team selectdiv">
+						<label>
+							<select v-model="d_selectedUserId">
+								<option disabled hidden selected value="">
+									Select a member
+								</option>
+								<option
+									v-for="user in s_registeredUsers"
+									:key="user._id"
+									:value="user._id"
+								>
+									{{ user.email }}
+								</option>
+							</select>
+						</label>
+						<button
+							@click="m_addMemberToTeam"
+							class="add-member-to-team-btn"
+						>
+							Add
+						</button>
+
+						<p class="selected-users">
+							<span>Selected Users:</span>
+							<span
+								v-for="selectedUser in d_selectedUsers"
+								:key="selectedUser._id"
+								>{{ selectedUser.email }}</span
+							>
+						</p>
+					</div>
+				</div>
+
+				<div
+					@click="m_createMeeting"
+					class="add-team-form-group add-team-btn-container"
+				>
+					<button class="create-team-btn">Create</button>
 				</div>
 			</div>
-
-			<div
-				@click="m_createMeeting"
-				class="add-team-form-group add-team-btn-container"
-			>
-				<button class="create-team-btn">Create</button>
+			<div @click="$emit('e_Teams_closeAddTeam')" class="close-form-icon">
+				<p class="add-team-close-form">+</p>
 			</div>
-		</div>
-		<div @click="$emit('e_Teams_closeAddTeam')" class="close-form-icon">
-			<p class="add-team-close-form">+</p>
 		</div>
 	</div>
 </template>
@@ -92,10 +105,6 @@
 	export default {
 		name: "AddTeam",
 		props: {
-			s_registeredUsers: {
-				type: Array,
-				required: true,
-			},
 			p_myTeams: {
 				type: Array,
 				required: true,
@@ -110,6 +119,8 @@
 				d_shortName: "",
 				d_description: "",
 				d_error: "",
+				d_alert_status: false,
+				d_alert: null,
 			};
 		},
 		computed: {
@@ -152,30 +163,42 @@
 									this.d_selectedUsers
 								);
 							} else {
-								// TODO: Error Handling and display alert
-								throw {
+								this.d_alert = {
+									type: "warning",
 									message: "Invalid Meeting Description",
-									value: this.d_description,
 								};
+
+								this.d_alert_status = true;
 							}
 						} else {
-							// TODO: Error Handling and display alert
-							throw {
+							this.d_alert = {
+								type: "warning",
 								message: "Invalid Meeting ShortName",
-								value: this.d_shortName,
 							};
+
+							this.d_alert_status = true;
 						}
 					} else {
-						// TODO: Error Handling and display alert
-						throw {
+						this.d_alert = {
+							type: "warning",
 							message: "Invalid Meeting Name",
-							value: this.d_name,
 						};
+
+						this.d_alert_status = true;
 					}
 				} catch (err) {
-					// TODO: Error Handling and display alert
+					this.d_alert = {
+						type: "danger",
+						message: "Something went wrong",
+					};
+
+					this.d_alert_status = true;
 					console.log(err);
 				}
+			},
+			m_removeAlert() {
+				this.d_alert_status = false;
+				this.d_alert = null;
 			},
 		},
 		async created() {
