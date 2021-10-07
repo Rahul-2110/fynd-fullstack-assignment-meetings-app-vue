@@ -204,7 +204,7 @@
 	.form-signin {
 		display: flex;
 		flex-direction: column;
-		max-width: 500px;
+		max-width: 400px;
 		padding: 15px;
 		margin: 6em auto;
 		color: #73c7d5;
