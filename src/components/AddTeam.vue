@@ -189,7 +189,7 @@
 				} catch (err) {
 					this.d_alert = {
 						type: "danger",
-						message: "Something went wrong",
+						message: err.message,
 					};
 
 					this.d_alert_status = true;
