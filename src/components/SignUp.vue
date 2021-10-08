@@ -119,8 +119,7 @@
 				} catch (error) {
 					this.d_alert = {
 						type: "danger",
-						message: "Something went wrong",
-						value: this.d_password,
+						message: error.message
 					};
 
 					this.d_alert_status = true;
@@ -192,6 +191,7 @@
 			m_removeAlert() {
 				this.d_alert_status = false;
 				this.d_alert = null;
+				this.$router.push({ path: "/login" });
 			},
 		},
 		created() {

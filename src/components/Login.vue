@@ -105,7 +105,6 @@
 					this.d_alert = {
 						type: "danger",
 						message: "Invalid credentials",
-						value: this.d_password,
 					};
 
 					this.d_alert_status = true;

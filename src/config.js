@@ -1,5 +1,5 @@
 const AppConfig = {
-	alertDuration: 5000,
+	alertDuration: 2500,
 	apiBaseUrl: "https://mymeetingsapp.herokuapp.com/api",
 };
 
