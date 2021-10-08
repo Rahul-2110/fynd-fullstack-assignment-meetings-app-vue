@@ -7,7 +7,7 @@
 			<ErrorBox :error="d_error" />
 		</template>
 		<template v-else>
-			<template v-if="d_alert_status === true">
+			<template v-if="d_alertstatus === true">
 				<app-alert
 					:type="d_alert.type"
 					:message="d_alert.message"
@@ -64,7 +64,7 @@
 				d_myTeams: [],
 				d_error: "",
 				d_addTeam: false,
-				d_alert_status: false,
+				d_alertstatus: false,
 				d_alert: null,
 			};
 		},
@@ -80,7 +80,7 @@
 						message: "Something went wrong"
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 					this.d_error = err;
 					//this.d_status = "ERROR";
@@ -98,7 +98,7 @@
 						message: "User added to the team."
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 				} catch (err) {
 					this.d_alert = {
@@ -106,7 +106,7 @@
 						message: "Something went wrong"
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 					this.d_error = err;
 					//this.d_status = "ERROR";
@@ -124,7 +124,7 @@
 						message: "Excused yourself from the team."
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					// console.log(response);
 					
 					this.d_status = "LOADED";
@@ -134,7 +134,7 @@
 						message: "Something went wrong"
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 					
 					this.d_error = err;
@@ -157,7 +157,7 @@
 						message: "Team created"
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					// console.log(response);
 					
 					this.d_status = "LOADED";
@@ -167,7 +167,7 @@
 						message: "Something went wrong"
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 					this.d_error = err;
 					// this.d_status = "ERROR";
@@ -175,7 +175,7 @@
 				}
 			},
 			m_removeAlert() {
-				this.d_alert_status = false;
+				this.d_alertstatus = false;
 				this.d_alert = null;
 			},
 		},

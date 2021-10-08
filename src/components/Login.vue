@@ -10,7 +10,7 @@
 			/> -->
 		</template>
 		<template v-else>
-			<template v-if="d_alert_status === true">
+			<template v-if="d_alertstatus === true">
 				<app-alert
 					:type="d_alert.type"
 					:message="d_alert.message"
@@ -82,7 +82,7 @@
 				d_password: null,
 				d_rememberMe: false,
 				d_status: "LOADING",
-				d_alert_status: false,
+				d_alertstatus: false,
 				d_alert: null,
 				d_error: null,
 				d_emailReg:
@@ -107,7 +107,7 @@
 						message: "Invalid credentials",
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 					console.log("There was some error\n" + error.message);
 				}
@@ -128,7 +128,7 @@
 							value: this.d_password,
 						};
 
-						this.d_alert_status = true;
+						this.d_alertstatus = true;
 						console.log("Check password");
 					}
 				} else {
@@ -138,13 +138,13 @@
 						message: "Invalid Name",
 						value: "",
 					};
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					this.d_status = "LOADED";
 					console.log("Check email address");
 				}
 			},
 			m_removeAlert() {
-				this.d_alert_status = false;
+				this.d_alertstatus = false;
 				this.d_alert = null;
 			},
 		},

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="d_alert_status === true">
+		<template v-if="d_alertstatus === true">
 			<app-alert
 				:type="d_alert.type"
 				:message="d_alert.message"
@@ -119,7 +119,7 @@
 				d_shortName: "",
 				d_description: "",
 				d_error: "",
-				d_alert_status: false,
+				d_alertstatus: false,
 				d_alert: null,
 			};
 		},
@@ -165,26 +165,26 @@
 							} else {
 								this.d_alert = {
 									type: "warning",
-									message: "Invalid Meeting Description",
+									message: "Invalid Team Description",
 								};
 
-								this.d_alert_status = true;
+								this.d_alertstatus = true;
 							}
 						} else {
 							this.d_alert = {
 								type: "warning",
-								message: "Invalid Meeting ShortName",
+								message: "Invalid Team ShortName",
 							};
 
-							this.d_alert_status = true;
+							this.d_alertstatus = true;
 						}
 					} else {
 						this.d_alert = {
 							type: "warning",
-							message: "Invalid Meeting Name",
+							message: "Invalid Team Name",
 						};
 
-						this.d_alert_status = true;
+						this.d_alertstatus = true;
 					}
 				} catch (err) {
 					this.d_alert = {
@@ -192,12 +192,12 @@
 						message: err.message,
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					console.log(err);
 				}
 			},
 			m_removeAlert() {
-				this.d_alert_status = false;
+				this.d_alertstatus = false;
 				this.d_alert = null;
 			},
 		},

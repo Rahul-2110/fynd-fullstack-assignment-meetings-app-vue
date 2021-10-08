@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="d_alert_status === true">
+		<template v-if="d_alertstatus === true">
 			<app-alert
 				:type="d_alert.type"
 				:message="d_alert.message"
@@ -144,7 +144,7 @@
 				d_meetingAttendees: "",
 				d_myTeams: [],
 				d_error: "",
-				d_alert_status: false,
+				d_alertstatus: false,
 				d_alert: null,
 			};
 		},
@@ -165,7 +165,7 @@
 						message: "Something went wrong",
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					//this.d_status = "ERROR";
 					this.d_error = err;
 				}
@@ -209,10 +209,10 @@
 												this.d_alert = {
 													type: "warning",
 													message:
-														"Wrong Team Short Name",
+														"Invalid Team Short Name",
 												};
 
-												this.d_alert_status = true;
+												this.d_alertstatus = true;
 											} else {
 												teamToAdd.members.forEach(
 													(user) => {
@@ -247,7 +247,7 @@
 														message: "Wrong Email ID",
 													};
 
-													this.d_alert_status = true;
+													this.d_alertstatus = true;
 												}
 											} else {
 												usersToAddObjectList.push({
@@ -283,14 +283,14 @@
 										message: "Meeting created successfully",
 									};
 
-									this.d_alert_status = true;
+									this.d_alertstatus = true;
 								} else {
 									this.d_alert = {
 										type: "warning",
 										message: "Invalid Description",
 									};
 
-									this.d_alert_status = true;
+									this.d_alertstatus = true;
 								}
 							} else {
 								this.d_alert = {
@@ -298,7 +298,7 @@
 									message: "Invalid End Time",
 								};
 
-								this.d_alert_status = true;
+								this.d_alertstatus = true;
 							}
 						} else {
 							this.d_alert = {
@@ -306,7 +306,7 @@
 								message: "Invalid Meeting Start Time and Date",
 							};
 
-							this.d_alert_status = true;
+							this.d_alertstatus = true;
 						}
 					} else {
 						this.d_alert = {
@@ -314,7 +314,7 @@
 							message: "Invalid Meeting Name",
 						};
 
-						this.d_alert_status = true;
+						this.d_alertstatus = true;
 					}
 				} catch (err) {
 					this.d_alert = {
@@ -322,12 +322,12 @@
 						message: err.message,
 					};
 
-					this.d_alert_status = true;
+					this.d_alertstatus = true;
 					console.log(err);
 				}
 			},
 			m_removeAlert() {
-				this.d_alert_status = false;
+				this.d_alertstatus = false;
 				this.d_alert = null;
 			},
 		},

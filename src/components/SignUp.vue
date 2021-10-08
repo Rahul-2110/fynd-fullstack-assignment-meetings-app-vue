@@ -10,7 +10,7 @@
 			/> -->
 		</template>
 		<template v-else>
-			<template v-if="d_alert_status === true">
+			<template v-if="d_alertStatus === true">
 				<app-alert
 					:type="d_alert.type"
 					:message="d_alert.message"
@@ -96,7 +96,8 @@
 				d_confirmPassword: "",
 				d_name: "",
 				d_status: "LOADING",
-				d_alert_status: false,
+				d_alertStatus: false,
+				d_userRegistered: false,
 				d_alert: null,
 				d_error: null,
 			};
@@ -114,7 +115,7 @@
 						message: "Account created",
 					};
 
-					this.d_alert_status = true;
+					this.d_alertStatus = true;
 					this.d_status = "LOADED";
 				} catch (error) {
 					this.d_alert = {
@@ -122,7 +123,7 @@
 						message: error.message
 					};
 
-					this.d_alert_status = true;
+					this.d_alertStatus = true;
 					this.d_status = "LOADED";
 					console.log("There was some error\n" + error.message);
 				}
@@ -147,7 +148,7 @@
 										value: this.d_password,
 									};
 
-									this.d_alert_status = true;
+									this.d_alertStatus = true;
 								}
 							} else {
 								this.d_alert = {
@@ -156,7 +157,7 @@
 									value: this.d_password,
 								};
 
-								this.d_alert_status = true;
+								this.d_alertStatus = true;
 							}
 						} else {
 							this.d_alert = {
@@ -165,7 +166,7 @@
 								value: this.d_password,
 							};
 
-							this.d_alert_status = true;
+							this.d_alertStatus = true;
 						}
 					} else {
 						this.d_alert = {
@@ -174,7 +175,7 @@
 							value: this.d_password,
 						};
 
-						this.d_alert_status = true;
+						this.d_alertStatus = true;
 					}
 				} catch (err) {
 					this.d_alert = {
@@ -183,15 +184,14 @@
 						value: this.d_password,
 					};
 
-					this.d_alert_status = true;
+					this.d_alertStatus = true;
 
 					console.log(err);
 				}
 			},
 			m_removeAlert() {
-				this.d_alert_status = false;
+				this.d_alertStatus = false;
 				this.d_alert = null;
-				this.$router.push({ path: "/login" });
 			},
 		},
 		created() {
