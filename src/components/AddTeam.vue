@@ -241,7 +241,7 @@
 		margin: 20px 30px;
 	}
 	.add-team-form-group {
-		margin: 20px 30px;
+		margin: 20px 10px;
 	}
 
 	.add-team-form-group-label {
@@ -372,6 +372,10 @@
 		.add-team-form-group-label {
 			display: inline-block;
 			margin: 10px 0;
+		}
+
+		.add-team-form-group {
+			margin: 20px 30px;
 		}
 
 		.add-team-form-group input,
