@@ -26,7 +26,7 @@
 	} */
 
 	.container {
-		margin: 120px 2em 50px 2em;
+		margin: 120px 2em 100px 2em;
 	}
 
 	hr {
@@ -41,7 +41,7 @@
 	}
 	@media (min-width: 768px) {
 		.container {
-			margin: 100px 3em 50px  3em;
+			margin: 100px 3em 100px  3em;
 		}
 	}
 </style>
