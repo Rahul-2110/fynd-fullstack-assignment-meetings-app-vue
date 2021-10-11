@@ -145,13 +145,13 @@
 				try {
 					this.d_addTeam = false;
 					this.d_status = "LOADING";
-					this.m_getMyTeams();
 					const response = await s_teams_addTeam(
 						name,
 						shortName,
 						description,
 						members
 					);
+					this.m_getMyTeams();
 					this.d_alert = {
 						type: "success",
 						message: "Team created"
