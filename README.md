@@ -1,5 +1,9 @@
 # fynd-fullstack-assignment-meetings-app-vue
 
+## Project Link 
+https://meetings-app-vue.herokuapp.com/
+
+
 ## Project setup
 ```
 npm install
