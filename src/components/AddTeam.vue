@@ -227,8 +227,8 @@
 
 	.close-form-icon {
 		position: absolute;
-		top: -3%;
-		right: 10%;
+		top: -10px;
+    		right: 10px;
 		transform: rotate(45deg);
 		cursor: pointer;
 	}
