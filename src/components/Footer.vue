@@ -23,6 +23,10 @@ export default {
     text-align: center;
     flex-direction: column;
     align-items: center;
+    
+    p{
+      margin: auto;
+    }
 }
 
 .fab{
